@@ -1,0 +1,201 @@
+year,cause,gender,age_group,deaths
+2018,Heart Disease,Male,0-14,28
+2019,Heart Disease,Male,0-14,13
+2020,Heart Disease,Male,0-14,14
+2021,Heart Disease,Male,0-14,38
+2022,Heart Disease,Male,0-14,43
+2018,Cancer,Male,0-14,16
+2019,Cancer,Male,0-14,44
+2020,Cancer,Male,0-14,37
+2021,Cancer,Male,0-14,15
+2022,Cancer,Male,0-14,14
+2018,Chronic Respiratory Diseases,Male,0-14,82
+2019,Chronic Respiratory Diseases,Male,0-14,37
+2020,Chronic Respiratory Diseases,Male,0-14,47
+2021,Chronic Respiratory Diseases,Male,0-14,54
+2022,Chronic Respiratory Diseases,Male,0-14,57
+2018,Accidents,Male,0-14,53
+2019,Accidents,Male,0-14,107
+2020,Accidents,Male,0-14,90
+2021,Accidents,Male,0-14,79
+2022,Accidents,Male,0-14,95
+2018,Stroke,Male,0-14,112
+2019,Stroke,Male,0-14,90
+2020,Stroke,Male,0-14,168
+2021,Stroke,Male,0-14,91
+2022,Stroke,Male,0-14,116
+2018,Heart Disease,Female,0-14,26
+2019,Heart Disease,Female,0-14,18
+2020,Heart Disease,Female,0-14,39
+2021,Heart Disease,Female,0-14,27
+2022,Heart Disease,Female,0-14,14
+2018,Cancer,Female,0-14,17
+2019,Cancer,Female,0-14,47
+2020,Cancer,Female,0-14,17
+2021,Cancer,Female,0-14,26
+2022,Cancer,Female,0-14,32
+2018,Chronic Respiratory Diseases,Female,0-14,25
+2019,Chronic Respiratory Diseases,Female,0-14,19
+2020,Chronic Respiratory Diseases,Female,0-14,45
+2021,Chronic Respiratory Diseases,Female,0-14,68
+2022,Chronic Respiratory Diseases,Female,0-14,35
+2018,Accidents,Female,0-14,115
+2019,Accidents,Female,0-14,35
+2020,Accidents,Female,0-14,126
+2021,Accidents,Female,0-14,121
+2022,Accidents,Female,0-14,84
+2018,Stroke,Female,0-14,77
+2019,Stroke,Female,0-14,70
+2020,Stroke,Female,0-14,85
+2021,Stroke,Female,0-14,50
+2022,Stroke,Female,0-14,15
+2018,Heart Disease,Male,15-44,10
+2019,Heart Disease,Male,15-44,17
+2020,Heart Disease,Male,15-44,14
+2021,Heart Disease,Male,15-44,26
+2022,Heart Disease,Male,15-44,15
+2018,Cancer,Male,15-44,31
+2019,Cancer,Male,15-44,38
+2020,Cancer,Male,15-44,12
+2021,Cancer,Male,15-44,16
+2022,Cancer,Male,15-44,27
+2018,Chronic Respiratory Diseases,Male,15-44,34
+2019,Chronic Respiratory Diseases,Male,15-44,7
+2020,Chronic Respiratory Diseases,Male,15-44,65
+2021,Chronic Respiratory Diseases,Male,15-44,14
+2022,Chronic Respiratory Diseases,Male,15-44,44
+2018,Accidents,Male,15-44,76
+2019,Accidents,Male,15-44,77
+2020,Accidents,Male,15-44,147
+2021,Accidents,Male,15-44,122
+2022,Accidents,Male,15-44,85
+2018,Stroke,Male,15-44,122
+2019,Stroke,Male,15-44,36
+2020,Stroke,Male,15-44,164
+2021,Stroke,Male,15-44,122
+2022,Stroke,Male,15-44,108
+2018,Heart Disease,Female,15-44,16
+2019,Heart Disease,Female,15-44,18
+2020,Heart Disease,Female,15-44,26
+2021,Heart Disease,Female,15-44,8
+2022,Heart Disease,Female,15-44,9
+2018,Cancer,Female,15-44,24
+2019,Cancer,Female,15-44,16
+2020,Cancer,Female,15-44,32
+2021,Cancer,Female,15-44,12
+2022,Cancer,Female,15-44,27
+2018,Chronic Respiratory Diseases,Female,15-44,36
+2019,Chronic Respiratory Diseases,Female,15-44,47
+2020,Chronic Respiratory Diseases,Female,15-44,50
+2021,Chronic Respiratory Diseases,Female,15-44,50
+2022,Chronic Respiratory Diseases,Female,15-44,33
+2018,Accidents,Female,15-44,106
+2019,Accidents,Female,15-44,105
+2020,Accidents,Female,15-44,114
+2021,Accidents,Female,15-44,150
+2022,Accidents,Female,15-44,53
+2018,Stroke,Female,15-44,54
+2019,Stroke,Female,15-44,38
+2020,Stroke,Female,15-44,83
+2021,Stroke,Female,15-44,44
+2022,Stroke,Female,15-44,37
+2018,Heart Disease,Male,45-64,8
+2019,Heart Disease,Male,45-64,11
+2020,Heart Disease,Male,45-64,26
+2021,Heart Disease,Male,45-64,4
+2022,Heart Disease,Male,45-64,32
+2018,Cancer,Male,45-64,23
+2019,Cancer,Male,45-64,17
+2020,Cancer,Male,45-64,29
+2021,Cancer,Male,45-64,17
+2022,Cancer,Male,45-64,10
+2018,Chronic Respiratory Diseases,Male,45-64,45
+2019,Chronic Respiratory Diseases,Male,45-64,33
+2020,Chronic Respiratory Diseases,Male,45-64,64
+2021,Chronic Respiratory Diseases,Male,45-64,16
+2022,Chronic Respiratory Diseases,Male,45-64,30
+2018,Accidents,Male,45-64,82
+2019,Accidents,Male,45-64,89
+2020,Accidents,Male,45-64,69
+2021,Accidents,Male,45-64,64
+2022,Accidents,Male,45-64,116
+2018,Stroke,Male,45-64,79
+2019,Stroke,Male,45-64,39
+2020,Stroke,Male,45-64,61
+2021,Stroke,Male,45-64,74
+2022,Stroke,Male,45-64,50
+2018,Heart Disease,Female,45-64,17
+2019,Heart Disease,Female,45-64,18
+2020,Heart Disease,Female,45-64,31
+2021,Heart Disease,Female,45-64,22
+2022,Heart Disease,Female,45-64,11
+2018,Cancer,Female,45-64,49
+2019,Cancer,Female,45-64,33
+2020,Cancer,Female,45-64,13
+2021,Cancer,Female,45-64,11
+2022,Cancer,Female,45-64,52
+2018,Chronic Respiratory Diseases,Female,45-64,51
+2019,Chronic Respiratory Diseases,Female,45-64,53
+2020,Chronic Respiratory Diseases,Female,45-64,20
+2021,Chronic Respiratory Diseases,Female,45-64,33
+2022,Chronic Respiratory Diseases,Female,45-64,47
+2018,Accidents,Female,45-64,136
+2019,Accidents,Female,45-64,105
+2020,Accidents,Female,45-64,52
+2021,Accidents,Female,45-64,74
+2022,Accidents,Female,45-64,187
+2018,Stroke,Female,45-64,86
+2019,Stroke,Female,45-64,164
+2020,Stroke,Female,45-64,123
+2021,Stroke,Female,45-64,71
+2022,Stroke,Female,45-64,75
+2018,Heart Disease,Male,65+,37
+2019,Heart Disease,Male,65+,21
+2020,Heart Disease,Male,65+,13
+2021,Heart Disease,Male,65+,30
+2022,Heart Disease,Male,65+,25
+2018,Cancer,Male,65+,16
+2019,Cancer,Male,65+,20
+2020,Cancer,Male,65+,27
+2021,Cancer,Male,65+,46
+2022,Cancer,Male,65+,12
+2018,Chronic Respiratory Diseases,Male,65+,37
+2019,Chronic Respiratory Diseases,Male,65+,48
+2020,Chronic Respiratory Diseases,Male,65+,15
+2021,Chronic Respiratory Diseases,Male,65+,11
+2022,Chronic Respiratory Diseases,Male,65+,7
+2018,Accidents,Male,65+,101
+2019,Accidents,Male,65+,6
+2020,Accidents,Male,65+,53
+2021,Accidents,Male,65+,82
+2022,Accidents,Male,65+,27
+2018,Stroke,Male,65+,179
+2019,Stroke,Male,65+,122
+2020,Stroke,Male,65+,101
+2021,Stroke,Male,65+,103
+2022,Stroke,Male,65+,99
+2018,Heart Disease,Female,65+,20
+2019,Heart Disease,Female,65+,23
+2020,Heart Disease,Female,65+,14
+2021,Heart Disease,Female,65+,16
+2022,Heart Disease,Female,65+,3
+2018,Cancer,Female,65+,16
+2019,Cancer,Female,65+,53
+2020,Cancer,Female,65+,66
+2021,Cancer,Female,65+,48
+2022,Cancer,Female,65+,13
+2018,Chronic Respiratory Diseases,Female,65+,91
+2019,Chronic Respiratory Diseases,Female,65+,16
+2020,Chronic Respiratory Diseases,Female,65+,38
+2021,Chronic Respiratory Diseases,Female,65+,49
+2022,Chronic Respiratory Diseases,Female,65+,52
+2018,Accidents,Female,65+,109
+2019,Accidents,Female,65+,140
+2020,Accidents,Female,65+,52
+2021,Accidents,Female,65+,81
+2022,Accidents,Female,65+,71
+2018,Stroke,Female,65+,113
+2019,Stroke,Female,65+,52
+2020,Stroke,Female,65+,56
+2021,Stroke,Female,65+,90
+2022,Stroke,Female,65+,126
