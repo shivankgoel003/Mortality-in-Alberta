@@ -8,11 +8,14 @@
 #### Workspace setup ####
 library(tidyverse)
 library(xlsx)
+library(janitor)
+library(readxl)
+library(dplyr)
 
 #### Clean data ####
 
 #death-by-gender-and-age data
-
+    
 file_path <- "data/raw_data/deaths-by-gender-and-age.csv"
 # Extracting 2018 data from death-by-gender-and-age data
 death_age_gender_2018 <- read.csv(file_path, skip = 19319, nrows = 20538 - 19320)
@@ -37,6 +40,113 @@ death_causes_2020 = read.xlsx("data/raw_data/deaths-leading-causes.xlsx", "Sheet
 death_causes_2021 = read.xlsx("data/raw_data/deaths-leading-causes.xlsx", "Sheet1", rowIndex = 606:635)
 # extracting 2022 data from death-by-gender-and-age data
 death_causes_2022 = read.xlsx("data/raw_data/deaths-leading-causes.xlsx", "Sheet1", rowIndex = 637:666)
+
+# Assigning column names for death-by-gender-and-age data
+column_names <- c("Calendar Year", "Cause", "Gender", "Age_0_4", "Age_5_9", "Age_10_14", "Age_15_19", "Age_20_24", 
+                  "Age_25_29", "Age_30_34", "Age_35_39", "Age_40_44", "Age_45_49", "Age_50_54", "Age_55_59", 
+                  "Age_60_64", "Age_65_69", "Age_70_74", "Age_75_79", "Age_80_84", "Age_85_89", "Age_90_plus", 
+                  "NS", "Res Total", "Non Res Total", "Grand Total")
+
+colnames(death_age_gender_2018) <- column_names
+colnames(death_age_gender_2019) <- column_names
+colnames(death_age_gender_2020) <- column_names
+colnames(death_age_gender_2021) <- column_names
+colnames(death_age_gender_2022) <- column_names
+
+# Assigning column names for death-leading-causes-data
+
+death_causes_column_names <- c("Calendar Year", "Cause", "Ranking", "Total Deaths")
+
+colnames(death_causes_2018) <- death_causes_column_names
+colnames(death_causes_2019) <- death_causes_column_names
+colnames(death_causes_2020) <- death_causes_column_names
+colnames(death_causes_2021) <- death_causes_column_names
+colnames(death_causes_2022) <- death_causes_column_names
+
+# Simplifying names
+death_age_gender_2018 = clean_names(death_age_gender_2018)
+death_age_gender_2019 = clean_names(death_age_gender_2019)
+death_age_gender_2020 = clean_names(death_age_gender_2020)
+death_age_gender_2021 = clean_names(death_age_gender_2021)
+death_age_gender_2022 = clean_names(death_age_gender_2022)
+death_causes_2018 = clean_names(death_causes_2018)
+death_causes_2019 = clean_names(death_causes_2019)
+death_causes_2020 = clean_names(death_causes_2020)
+death_causes_2021 = clean_names(death_causes_2021)
+death_causes_2022 = clean_names(death_causes_2022)
+
+##columns of interest
+death_age_gender_2018 = 
+  death_age_gender_2018 |>
+  select(
+    calendar_year, cause, gender,
+    age_0_4, age_5_9,
+    age_10_14, age_15_19,
+    age_20_24, age_25_29,
+    age_30_34, age_40_44,
+    age_45_49, age_50_54,
+    age_60_64, age_65_69,
+    age_70_74, age_75_79,
+    age_80_84, age_85_89,
+    age_90_plus, grand_total)
+
+death_age_gender_2019 = 
+  death_age_gender_2019 |>
+  select(
+    calendar_year, cause, gender,
+    age_0_4, age_5_9,
+    age_10_14, age_15_19,
+    age_20_24, age_25_29,
+    age_30_34, age_40_44,
+    age_45_49, age_50_54,
+    age_60_64, age_65_69,
+    age_70_74, age_75_79,
+    age_80_84, age_85_89,
+    age_90_plus, grand_total)
+
+
+death_age_gender_2020 = 
+  death_age_gender_2020 |>
+  select(
+    calendar_year, cause, gender,
+    age_0_4, age_5_9,
+    age_10_14, age_15_19,
+    age_20_24, age_25_29,
+    age_30_34, age_40_44,
+    age_45_49, age_50_54,
+    age_60_64, age_65_69,
+    age_70_74, age_75_79,
+    age_80_84, age_85_89,
+    age_90_plus, grand_total)
+
+
+death_age_gender_2021 = 
+  death_age_gender_2021 |>
+  select(
+    calendar_year, cause, gender,
+    age_0_4, age_5_9,
+    age_10_14, age_15_19,
+    age_20_24, age_25_29,
+    age_30_34, age_40_44,
+    age_45_49, age_50_54,
+    age_60_64, age_65_69,
+    age_70_74, age_75_79,
+    age_80_84, age_85_89,
+    age_90_plus, grand_total)
+
+death_age_gender_2022 = 
+  death_age_gender_2022 |>
+  select(
+    calendar_year, cause, gender,
+    age_0_4, age_5_9,
+    age_10_14, age_15_19,
+    age_20_24, age_25_29,
+    age_30_34, age_40_44,
+    age_45_49, age_50_54,
+    age_60_64, age_65_69,
+    age_70_74, age_75_79,
+    age_80_84, age_85_89,
+    age_90_plus, grand_total)
 
 
 
