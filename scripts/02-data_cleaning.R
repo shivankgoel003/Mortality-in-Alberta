@@ -16,7 +16,7 @@ library(dplyr)
 df <- read_csv("data/raw_data/deaths-leading-causes.csv", skip = 2)
 
 # Filter the data to include only rows where the Cause is "Acute myocardial infarction" or "Malignant neoplasms of trachea, bronchus and lung"
-filtered_df <- df[df$Cause %in% c("Acute myocardial infarction", "Malignant neoplasms of trachea, bronchus and lung"), ]
+filtered_df <- df[df$Cause %in% c("Acute myocardial infarction", "Malignant neoplasms of trachea, bronchus and lung", "Other chronic obstructive pulmonary disease", "All other forms of chronic ischemic heart disease"), ]
 
 # Select only the necessary columns: Year, Cause, Ranking, and Total Deaths
 cleaned_df <- filtered_df[, c("Calendar Year", "Cause", "Ranking", "Total Deaths")]
@@ -24,6 +24,28 @@ cleaned_df <- filtered_df[, c("Calendar Year", "Cause", "Ranking", "Total Deaths
 # Rename the columns
 colnames(cleaned_df) <- c("Year", "Cause", "Ranking", "Total Deaths")
 
+cleaned_df <- cleaned_df %>%
+  filter(`Year` >= 2012)
+
 # Write the cleaned data to a new CSV file
 write_csv(cleaned_df, "data/analysis_data/cleaned_file.csv")
 
+
+## Other dataset ##
+
+data <- read_csv("data/raw_data/download.csv")
+
+# Select only the necessary columns and rename them
+cleaned_data <- data[, c("CSD", "Period", "Air Quality Health Index", "Health Risk", "OriginalValue")]
+# Rename the columns
+cleaned_data <- cleaned_data %>%
+  rename(Municipality = CSD,
+         Year = Period)
+
+cleaned_data <- cleaned_data %>%
+  arrange(Year)
+cleaned_data <- cleaned_data %>%
+  filter(`Year` >= 2012)
+
+# Save the cleaned dataset to a CSV file
+write.csv(cleaned_data, file = "data/analysis_data/cleaned_air_data.csv", row.names = FALSE)
