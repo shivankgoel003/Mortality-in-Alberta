@@ -163,3 +163,25 @@ write_csv(death_causes_2020, "data/analysis_data/death_causes/2020.csv")
 write_csv(death_causes_2021, "data/analysis_data/death_causes/2021.csv")
 write_csv(death_causes_2022, "data/analysis_data/death_causes/2022.csv")
 
+
+
+
+### Extra cleaning ###
+# Read the CSV file
+data <- read.csv(file_path, skip = 2, stringsAsFactors = FALSE)
+
+# Remove rows with "Total" as cause
+data <- data[!grepl("Total", data$Cause), ]
+
+# Reshape the data
+library(tidyr)
+cleaned_data <- pivot_longer(data, starts_with("0-"), names_to = "Age_Group", values_to = "Deaths")
+
+# Extract gender from Cause column and remove it from Cause
+cleaned_data$Gender <- sub(".*\\s", "", cleaned_data$Cause)
+cleaned_data$Cause <- sub("\\s\\S+$", "", cleaned_data$Cause)
+
+
+# Print cleaned dataset
+print(cleaned_data)
+
