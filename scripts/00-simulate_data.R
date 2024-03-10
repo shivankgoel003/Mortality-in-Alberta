@@ -1,38 +1,60 @@
 #### Preamble ####
 # Purpose: Cleans the two data sets for the years 2018 to 2021
-# Author: Navya Gupta, Shivank Goel, Vanshika Vanshika
+# Author: Navya Hooda, Shivank Goel, Vanshika Vanshika
 # Date: 07 March 2024 
 # Contact: shivankg.goel@mail.utoronto.ca
 # License: MIT
 
+# Load the tidyverse package for data manipulation
 library(tidyverse)
+library(MASS)
 
 # Set seed for reproducibility
-set.seed(42)
+set.seed(2024)
 
-# Define the simulation parameters
-years <- 2018:2022
-causes <- c("Heart Disease", "Cancer", "Chronic Respiratory Diseases", "Accidents", "Stroke")
-genders <- c("Male", "Female")
-age_groups <- c("0-14", "15-44", "45-64", "65+")
+#### Simulate death data ####
 
-# Define the size parameter for the negative binomial distribution to simulate over-dispersion
-size_param <- 5
+# Since we have 4 diseases and 12 years, each disease should appear exactly 12 times to match the number of years
+death_data <- tibble(
+  year = rep(2011:2022, times = 4),  # Replicate each year 4 times to match the number of diseases
+  disease = rep(c("Other chronic obstructive pulmonary disease", 
+                  "All other forms of chronic ischemic heart disease", 
+                  "Acute myocardial infarction", 
+                  "Malignant neoplasms of trachea, bronchus and lung"), each = 12),  # Each disease repeated 12 times
+  deaths = rnbinom(n = 48, size = 100, prob = 0.02)  # We now need 48 random numbers to match the expanded dataset
+)
 
-# Simulate the dataset
-simulated_data <- expand.grid(year = years, cause = causes, gender = genders, age_group = age_groups) %>%
-  mutate(
-    # Assume the 'size' parameter as a dispersion factor and 'prob' parameter to vary by cause
-    # Adjust 'prob' parameter as per hypothetical base rates for each cause
-    deaths = rnbinom(n = n(), size = size_param, prob = case_when(
-      cause == "Heart Disease" ~ 0.2,
-      cause == "Cancer" ~ 0.15,
-      cause == "Chronic Respiratory Diseases" ~ 0.1,
-      cause == "Accidents" ~ 0.05,
-      cause == "Stroke" ~ 0.05,
-      TRUE ~ 0.1
-    ))
-  )
+#### Simulate air quality data ####
 
-# Writing the simulated data 
-write_csv(simulated_data, "data/analysis_data/simulated_data.csv")
+# Assuming the PM2.5 data is the same for both locations, we replicate the PM2.5 data twice for each year
+pm25_data <- tibble(
+  year = rep(2011:2022, times = 2),  # Each year appears twice
+  pm25 = rnbinom(n = 24, size = 50, prob = 0.05)  # We now need 24 random numbers to match the number of years times two
+)
+
+#### Combine both datasets for modeling ####
+
+# Join datasets by 'year'
+combined_data <- left_join(death_data, pm25_data, by = "year")
+
+# Fit a Negative Binomial Model
+model <- glm.nb(deaths ~ pm25 + factor(year) + factor(disease), data = combined_data)
+
+# Model Diagnostics
+par(mfrow=c(2,2))
+plot(model)
+
+# Plotting Observed vs. Predicted Deaths
+combined_data$predicted_deaths <- predict(model, type = "response")
+ggplot(combined_data, aes(x = deaths, y = predicted_deaths)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  labs(x = "Observed Deaths", y = "Predicted Deaths") +
+  theme_minimal()
+
+# Effect of PM2.5 on Predicted Deaths
+ggplot(combined_data, aes(x = pm25, y = predicted_deaths, color = factor(year))) +
+  geom_point() +
+  labs(x = "PM2.5 Concentration", y = "Predicted Deaths") +
+  theme_minimal() +
+  facet_wrap(~disease)
