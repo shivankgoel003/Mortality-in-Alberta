@@ -26,8 +26,6 @@ colnames(cleaned_df) <- c("Year", "Cause", "Ranking", "Total Deaths")
 
 cleaned_df <- cleaned_df %>%
   filter(`Year` >= 2012)
-
-#cleaning names 
 cleaned_df = clean_names(cleaned_df)
 
 # Write the cleaned data to a new CSV file
@@ -50,10 +48,7 @@ cleaned_data <- cleaned_data %>%
 cleaned_data <- cleaned_data %>%
   filter(`Year` >= 2012)
 
-#clean names
-
 cleaned_data = clean_names(cleaned_data)
-
 
 # Save the cleaned dataset to a CSV file
 write.csv(cleaned_data, file = "data/analysis_data/cleaned_air_data.csv", row.names = FALSE)
