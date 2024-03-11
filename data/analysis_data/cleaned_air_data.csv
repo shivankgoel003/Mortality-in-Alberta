@@ -1,4 +1,4 @@
-"Municipality","Year","Air Quality Health Index","Health Risk","OriginalValue"
+"municipality","year","air_quality_health_index","health_risk","original_value"
 "Red Deer",2012,"1","High Quality",0.08876
 "Fort Saskatchewan",2012,"1","High Quality",0.1423
 "Edmonton",2012,"1","High Quality",0.03852

@@ -65,14 +65,14 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
+# analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+# 
+# analysis_data |> 
+#   ggplot(aes(x = width, y = length)) +
+#   geom_point(alpha = 0.8) +
+#   theme_minimal() +
+#   labs(x = "Wing width (mm)",
+#        y = "Wing length (mm)")
 ```
 
 Talk way more about it. 
@@ -122,6 +122,12 @@ library(rstanarm)
 
 first_model <-
   readRDS(file = here::here("models/first_model.rds"))
+
+poisson_model <-
+  readRDS(file = here::here("models/poisson_model.rds"))
+
+causes_model <-
+  readRDS(file = here::here("models/causes_model.rds"))
 ```
 
 ```{r}
@@ -130,100 +136,30 @@ first_model <-
 #| label: tbl-modelresults
 #| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
 #| warning: false
-# 
-# modelsummary::modelsummary(
-#   list(
-#     "First model" = first_model
-#   ),
-#   statistic = "mad",
-#   fmt = 2
-# )
-# Load the required library
-library(MASS)
-library(ggplot2)
-library(dplyr)
-library(cowplot)
 
-# Check the column names in the merged data
-colnames(merged_data)
-
-# Make sure the column name for Total Deaths matches
-# Adjust the column name accordingly if needed
-
-# Create a negative binomial model
-model_nb <- glm.nb(`Total.Deaths` ~ `OriginalValue` + `Cause`, data = merged_data)
-
-# View the summary of the negative binomial model
-summary(model_nb)
-
-
-# Load the required library
-library(ggplot2)
-
-# Predict the values using the negative binomial model
-merged_data$predicted_deaths <- predict(model_nb, type = "response")
-
-# Plot the relationship between Air Quality and Predicted Deaths
-ggplot(merged_data, aes(x = OriginalValue, y = predicted_deaths, color = Cause)) +
-  geom_point() +
-  geom_smooth(method = "glm.nb", formula = y ~ x, se = FALSE) +
-  labs(x = "Air Quality Health Index", y = "Predicted Deaths", color = "Cause") +
-  theme_minimal()
-
-
-
-# Assuming you have loaded your data into 'air_quality_data' and 'deaths_data'
-
-# Merge the air quality and deaths data by year
-merged_data <- merge(air_quality_data, deaths_data, by = "Year")
-
-# Plot the regression graph
-regression_plot <- ggplot(merged_data, aes(x = OriginalValue, y = Total.Deaths)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line
-  labs(title = "Regression Graph: Air Quality vs Deaths",
-       x = "Air Quality Index",
-       y = "Total Deaths") +
-  theme_minimal()
-
-# Show the plot
-print(regression_plot)
-
-
-
-library(ggplot2)
-library(tidyr)
-
-# Your dataset
-data <- data.frame(
-  "Year" = c(2000:2021),
-  "Category" = c(17.6, 17.5, 17.7, 19.9, 17.6, 12.9, 14.9, 14, 14.3, 16.1, 28, 26.9, 21.3, 18.1, 25.7, 31.9, 31.2, 25.8, 52, 21.7, 15.8, 32.9),
-  "Provincial Average" = c(13.5, 9.5, 11.5, 11.5, 13.6, 8.9, 11.7, 10.3, 9.8, 11.9, 16.3, 11.3, 13.3, 10.3, 16.7, 17, 11.9, 14.9, 32.8, 15.3, 10.8, 26.2),
-  "10th Percentile" = c(23.7, 22.4, 24.5, 33.5, 21.6, 16.6, 18.4, 16.8, 19.9, 22.4, 41.4, 60.5, 31.5, 24, 34.1, 48.1, 49.4, 34.9, 65.9, 28, 20.1, 42.4),
-  "Calgary" = c(22, 20.8, 18.8, 35.5, 17.6, 13.2, 18.3, 16.2, 14.5, 19.5, 30.8, 24, 21.9, 20.8, 21.2, 28.1, 14.7, 34.6, 58.1, 19.2, 18.9, 44.2),
-  "Edmonton" = c(24.9, 24, 23.4, 24, 21.4, 14.4, 17.8, 14.8, 18.6, 21.5, 46.4, 26.9, 22.3, 29.5, 26, 23.7, 22.7, 29, 49.1, 26.2, 20.6, 38.4),
-  "Fort McMurray" = c(13.7, 15.9, 15.2, 11.5, 1.5, 12.7, 14.1, 15.1, 14.9, 13.9, 16.4, 72.4, 20.8, 17, 35.1, 40.9, 208.4, 15.9, 35.4, 21.5, 12.6, 25.9),
-  "Grande Prairie" = c(NA, NA, NA, NA, 14.2, 14.8, 16.4, 11.9, 11.5, 14.7, 29.1, 20.3, 19.5, 17.6, 35.9, 20.9, 21, 26.3, 60.5, 23.8, 17.9, 29.7),
-  "Lethbridge" = c(NA, NA, NA, NA, 15.7, 10.1, 12.3, 12, 9.8, NA, 25.7, 18.5, 23.4, NA, 16.5, 42, 10.7, 44.9, 58.4, 20.8, 20.5, 38.2),
-  "Medicine Hat" = c(NA, NA, NA, NA, 13.8, 8.8, 9.5, 10.5, 10, 24.3, NA, 18, 22.3, 34.5, 20.4, 24.5, 16.5, 29.3, 43, 13.7, 16.3, 32.8),
-  "Red Deer" = c(27, 20.9, 15.3, 20.9, 27, 27, 22.3, 11.8, 11.6, 27, 37.5, 34.1, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27),
-  "CAAQS" = c(27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27)
+modelsummary::modelsummary(
+  list(
+    "First model" = first_model
+  ),
+  #statistic = "mad",
+  fmt = 2
 )
 
-# Reshape the data from wide to long format for plotting
-data_long <- pivot_longer(data, cols = -Year, names_to = "Variable", values_to = "Value")
+modelsummary::modelsummary(
+  list(
+    "First model" = poisson_model
+  ),
+  #statistic = "mad",
+  fmt = 2
+)
 
-# Plot the average air index and total death rates over the years
-graph <- ggplot(data_long, aes(x = Year, y = Value, color = Variable)) +
-  geom_line() +
-  labs(title = "Average Air Index and Total Death Rates Over the Years",
-       x = "Year",
-       y = "Value") +
-  theme_minimal() +
-  scale_color_manual(values = c("red", "blue", "green", "orange", "purple", "black", "brown", "lightblue","pink", "darkgreen", "lightgreen")) # Adjust color palette as needed
-
-# Show the plot
-print(graph)
+modelsummary::modelsummary(
+  list(
+    "First model" = causes_model
+  ),
+  #statistic = "mad",
+  fmt = 2
+)
 ```
 
 
@@ -269,11 +205,13 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 #| fig-cap: "Examining how the model fits, and is affected by, the data"
 #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(first_model) +
+# Create the posterior predictive check plot
+pp_plot <- pp_check(first_model) +
   theme_classic() +
   theme(legend.position = "bottom")
 
-posterior_vs_prior(first_model) +
+# Create the posterior vs prior plot
+posterior_plot <- posterior_vs_prior(first_model) +
   theme_minimal() +
   scale_color_brewer(palette = "Set1") +
   theme(legend.position = "bottom") +
