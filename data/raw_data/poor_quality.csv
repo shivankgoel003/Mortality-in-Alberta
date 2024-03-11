@@ -1,0 +1,151 @@
+Year,Station,Region,Measure,Number of Hours
+2010,Edmonton Central,North,Poor,41
+2010,Edmonton East,North,Poor,49
+2010,Edmonton South,North,Poor,41
+2010,Fort Saskatchewan,North,Poor,No Measurement
+2010,Woodcroft,North,Poor,No Measurement
+2010,Cold Lake South,North,Poor,5
+2010,Fort McMurray AV,North,Poor,No Measurement
+2010,Fort McMurray PM,North,Poor,No Measurement
+2010,Henry Pirker,North,Poor,6
+2010,Calgary Central 2,South,Poor,22
+2010,Calgary East,South,Poor,21
+2010,Calgary Northwest,South,Poor,14
+2010,Crescent Heights,South,Poor,No Measurement
+2010,Lethbridge,South,Poor,9
+2010,Red Deer Riverside,South,Poor,11
+2010,Edmonton Central,North,Very Poor,7
+2010,Edmonton East,North,Very Poor,10
+2010,Edmonton South,North,Very Poor,13
+2010,Fort Saskatchewan,North,Very Poor,No Measurement
+2010,Woodcroft,North,Very Poor,No Measurement
+2010,Cold Lake South,North,Very Poor,6
+2010,Fort McMurray AV,North,Very Poor,No Measurement
+2010,Fort McMurray PM,North,Very Poor,No Measurement
+2010,Henry Pirker,North,Very Poor,4
+2010,Calgary Central 2,South,Very Poor,5
+2010,Calgary East,South,Very Poor,5
+2010,Calgary Northwest,South,Very Poor,5
+2010,Crescent Heights,South,Very Poor,No Measurement
+2010,Lethbridge,South,Very Poor,7
+2010,Red Deer Riverside,South,Very Poor,19
+2011,Edmonton Central,North,Poor,14
+2011,Edmonton East,North,Poor,15
+2011,Edmonton South,North,Poor,11
+2011,Fort Saskatchewan,North,Poor,10
+2011,Woodcroft,North,Poor,No Measurement
+2011,Cold Lake South,North,Poor,8
+2011,Fort McMurray AV,North,Poor,No Measurement
+2011,Fort McMurray PM,North,Poor,No Measurement
+2011,Henry Pirker,North,Poor,7
+2011,Calgary Central 2,South,Poor,2
+2011,Calgary East,South,Poor,No Measurement
+2011,Calgary Northwest,South,Poor,4
+2011,Crescent Heights,South,Poor,1
+2011,Lethbridge,South,Poor,2
+2011,Red Deer Riverside,South,Poor,2
+2011,Edmonton Central,North,Very Poor,0
+2011,Edmonton East,North,Very Poor,0
+2011,Edmonton South,North,Very Poor,0
+2011,Fort Saskatchewan,North,Very Poor,0
+2011,Woodcroft,North,Very Poor,No Measurement
+2011,Cold Lake South,North,Very Poor,1
+2011,Fort McMurray AV,North,Very Poor,No Measurement
+2011,Fort McMurray PM,North,Very Poor,No Measurement
+2011,Henry Pirker,North,Very Poor,5
+2011,Calgary Central 2,South,Very Poor,0
+2011,Calgary East,South,Very Poor,No Measurement
+2011,Calgary Northwest,South,Very Poor,0
+2011,Crescent Heights,South,Very Poor,0
+2011,Lethbridge,South,Very Poor,1
+2011,Red Deer Riverside,South,Very Poor,0
+2012,Edmonton Central,North,Poor,2
+2012,Edmonton East,North,Poor,8
+2012,Edmonton South,North,Poor,No Measurement
+2012,Fort Saskatchewan,North,Poor,3
+2012,Woodcroft,North,Poor,No Measurement
+2012,Cold Lake South,North,Poor,12
+2012,Fort McMurray AV,North,Poor,11
+2012,Fort McMurray PM,North,Poor,No Measurement
+2012,Henry Pirker,North,Poor,12
+2012,Calgary Central 2,South,Poor,0
+2012,Calgary East,South,Poor,No Measurement
+2012,Calgary Northwest,South,Poor,0
+2012,Crescent Heights,South,Poor,3
+2012,Lethbridge,South,Poor,No Measurement
+2012,Red Deer Riverside,South,Poor,0
+2012,Edmonton Central,North,Very Poor,0
+2012,Edmonton East,North,Very Poor,0
+2012,Edmonton South,North,Very Poor,No Measurement
+2012,Fort Saskatchewan,North,Very Poor,0
+2012,Woodcroft,North,Very Poor,No Measurement
+2012,Cold Lake South,North,Very Poor,1
+2012,Fort McMurray AV,North,Very Poor,2
+2012,Fort McMurray PM,North,Very Poor,No Measurement
+2012,Henry Pirker,North,Very Poor,0
+2012,Calgary Central 2,South,Very Poor,0
+2012,Calgary East,South,Very Poor,No Measurement
+2012,Calgary Northwest,South,Very Poor,0
+2012,Crescent Heights,South,Very Poor,0
+2012,Lethbridge,South,Very Poor,No Measurement
+2012,Red Deer Riverside,South,Very Poor,0
+2013,Edmonton Central,North,Poor,5
+2013,Edmonton East,North,Poor,14
+2013,Edmonton South,North,Poor,0
+2013,Fort Saskatchewan,North,Poor,8
+2013,Woodcroft,North,Poor,No Measurement
+2013,Cold Lake South,North,Poor,0
+2013,Fort McMurray AV,North,Poor,13
+2013,Fort McMurray PM,North,Poor,9
+2013,Henry Pirker,North,Poor,0
+2013,Calgary Central 2,South,Poor,0
+2013,Calgary East,South,Poor,No Measurement
+2013,Calgary Northwest,South,Poor,4
+2013,Crescent Heights,South,Poor,No Measurement
+2013,Lethbridge,South,Poor,2
+2013,Red Deer Riverside,South,Poor,0
+2013,Edmonton Central,North,Very Poor,0
+2013,Edmonton East,North,Very Poor,9
+2013,Edmonton South,North,Very Poor,0
+2013,Fort Saskatchewan,North,Very Poor,0
+2013,Woodcroft,North,Very Poor,No Measurement
+2013,Cold Lake South,North,Very Poor,0
+2013,Fort McMurray AV,North,Very Poor,1
+2013,Fort McMurray PM,North,Very Poor,0
+2013,Henry Pirker,North,Very Poor,0
+2013,Calgary Central 2,South,Very Poor,0
+2013,Calgary East,South,Very Poor,No Measurement
+2013,Calgary Northwest,South,Very Poor,0
+2013,Crescent Heights,South,Very Poor,No Measurement
+2013,Lethbridge,South,Very Poor,0
+2013,Red Deer Riverside,South,Very Poor,0
+2014,Edmonton Central,North,Poor,1
+2014,Edmonton East,North,Poor,0
+2014,Edmonton South,North,Poor,0
+2014,Fort Saskatchewan,North,Poor,8
+2014,Woodcroft,North,Poor,8
+2014,Cold Lake South,North,Poor,13
+2014,Fort McMurray AV,North,Poor,21
+2014,Fort McMurray PM,North,Poor,17
+2014,Henry Pirker,North,Poor,16
+2014,Calgary Central 2,South,Poor,1
+2014,Calgary East,South,Poor,No Measurement
+2014,Calgary Northwest,South,Poor,0
+2014,Crescent Heights,South,Poor,1
+2014,Lethbridge,South,Poor,0
+2014,Red Deer Riverside,South,Poor,0
+2014,Edmonton Central,North,Very Poor,0
+2014,Edmonton East,North,Very Poor,0
+2014,Edmonton South,North,Very Poor,0
+2014,Fort Saskatchewan,North,Very Poor,0
+2014,Woodcroft,North,Very Poor,4
+2014,Cold Lake South,North,Very Poor,0
+2014,Fort McMurray AV,North,Very Poor,3
+2014,Fort McMurray PM,North,Very Poor,1
+2014,Henry Pirker,North,Very Poor,4
+2014,Calgary Central 2,South,Very Poor,0
+2014,Calgary East,South,Very Poor,No Measurement
+2014,Calgary Northwest,South,Very Poor,0
+2014,Crescent Heights,South,Very Poor,0
+2014,Lethbridge,South,Very Poor,0
+2014,Red Deer Riverside,South,Very Poor,0
