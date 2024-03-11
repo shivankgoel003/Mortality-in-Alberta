@@ -37,6 +37,8 @@ pm25_data <- tibble(
 # Join datasets by 'year'
 combined_data <- left_join(death_data, pm25_data, by = "year")
 
+head(combined_data)
+
 # Fit a Negative Binomial Model
 model <- glm.nb(deaths ~ pm25 + factor(year) + factor(disease), data = combined_data)
 
