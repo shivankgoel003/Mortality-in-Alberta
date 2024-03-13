@@ -15,7 +15,8 @@ library(rstanarm)
 #### Read data ####
 deaths_data <- read.csv(here("data/analysis_data/cleaned_file.csv"))
 air_quality_data <- read.csv(here("data/analysis_data/cleaned_air_data.csv"))
-
+data_average <- read.csv(here("data/analysis_data/cleaned_chart_data.csv"))
+data_peak <- read.csv(here("data/analysis_data/cleaned_peak_data.csv"))
 
 ### Model data ####
 # first_model <-
@@ -29,17 +30,7 @@ air_quality_data <- read.csv(here("data/analysis_data/cleaned_air_data.csv"))
 #     seed = 853
 #   )
 
-# 
-# merged_data <- merge(air_quality_data, deaths_data, by = "year")  # Adjust the common key as needed
-# 
-# print(merged_data)
-# # Fit negative binomial regression model
-# total_deaths_model_neg_binomial <- stan_glm(
-#   total_deaths ~ original_value + cause,
-#   data = merged_data,
-#   family = neg_binomial_2(link = "log"),
-#   seed = 123  # Set your desired seed value
-# )
+
 library(tidyverse)
 library(readr)
 library(MASS)
@@ -61,6 +52,24 @@ poisson_model <- glm(air_quality_health_index ~ year, data = data, family = pois
 
 causes_model <- glm.nb(total_deaths ~ year + cause, data = deaths_data)
 
+## model for concentrations
+
+
+# # Fit negative binomial regression model using stan_glm
+# negative_binomial_model <- stan_glm(total_deaths ~ provincial_average, 
+#                                     data = data, 
+#                                     family = neg_binomial_2(), 
+#                                     seed = 123)
+# 
+# # Summary of the model
+# summary(negative_binomial_model)
+
+# Fit negative binomial regression model
+negative_binomial_model <- glm.nb(total_deaths ~ provincial_average, data = data_average)
+
+# Summary of the model
+summary(negative_binomial_model)
+
 #### Save model ####
 saveRDS(
   first_model,
@@ -70,4 +79,7 @@ saveRDS(poisson_model,
         file = "models/poisson_model.rds" )
 saveRDS(causes_model,
         file = "models/causes_model.rds" )
+saveRDS(negative_binomial_model,
+        file = "models/p_average_model.rds" )
+
 
