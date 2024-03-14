@@ -27,6 +27,8 @@ deaths_data <- read.csv(here("data/analysis_data/cleaned_file.csv"))
 air_quality_data <- read.csv(here("data/analysis_data/cleaned_air_data.csv"))
 data <- read.csv(here("data/analysis_data/cleaned_chart_data.csv"))
 data_peak <- read.csv(here("data/analysis_data/cleaned_peak_data.csv"))
+data_lung <- read.csv(here("data/analysis_data/merged_data.csv"))
+data_heart <- read.csv(here("data/analysis_data/merged_heart_data.csv"))
 ```
 
 
@@ -77,6 +79,22 @@ ggplot(data, aes(x = provincial_average, y = total_deaths)) +
   geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
   labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Graph") +
   theme_minimal()
+
+
+# Plot the regression graph for all lungs causes
+ggplot(data_lung, aes(x = provincial_average, y = total_deaths)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
+  labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Lung") +
+  theme_minimal()
+
+# Plot the regression graph for all heart causes
+ggplot(data, aes(x = provincial_average, y = total_deaths)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
+  labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Heart") +
+  theme_minimal()
+
 
 ```
 
@@ -143,71 +161,22 @@ Our results are summarized in @tbl-modelresults.
 #| eval: true
 #| warning: false
 #| message: false
+# 
+# library(rstanarm)
+# 
+# first_model <-
+#   readRDS(file = here::here("models/first_model.rds"))
+# 
+# poisson_model <-
+#   readRDS(file = here::here("models/poisson_model.rds"))
+# 
+# causes_model <-
+#   readRDS(file = here::here("models/causes_model.rds"))
+# 
+# p_average_model <-
+#   readRDS(file = here::here("models/p_average_model.rds"))
+# 
 
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-
-poisson_model <-
-  readRDS(file = here::here("models/poisson_model.rds"))
-
-causes_model <-
-  readRDS(file = here::here("models/causes_model.rds"))
-
-p_average_model <-
-  readRDS(file = here::here("models/p_average_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-library(modelsummary)
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  #statistic = "mad",
-  fmt = 2
-)
-
-modelsummary::modelsummary(
-  list(
-    "First model" = poisson_model
-  ),
-  #statistic = "mad",
-  fmt = 2
-)
-
-modelsummary::modelsummary(
-  list(
-    "First model" = causes_model
-  ),
-  #statistic = "mad",
-  fmt = 2
-)
-
-modelsummary::modelsummary(
-  list(
-    "First model" = p_average_model
-  ),
-  #statistic = "mad",
-  fmt = 2
-)
-```
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
 library(rstanarm)
 library(here)
@@ -218,12 +187,61 @@ library(modelsummary)
 neg_binom_model <- readRDS(file = here::here("models/neg_binom_model.rds"))
 stan_neg_binom_model <- readRDS(file = here::here("models/stan_neg_binom_model.rds"))
 stan_poisson_model <-readRDS(file = here::here("models/stan_poisson_model.rds"))
+peak_neg_binom_model <- readRDS(file = here::here("models/peak_neg_binom_model.rds"))
+peak_poisson_model <-readRDS(file = here::here("models/peak_poisson_model.rds"))
 first_model <-
   readRDS(file = here::here("models/first_model.rds"))
 
 poisson_model <-
   readRDS(file = here::here("models/poisson_model.rds"))
 
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-modelresults
+#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
+#| warning: false
+library(modelsummary)
+# modelsummary::modelsummary(
+#   list(
+#     "First model" = first_model
+#   ),
+#   #statistic = "mad",
+#   fmt = 2
+# )
+# 
+# modelsummary::modelsummary(
+#   list(
+#     "First model" = poisson_model
+#   ),
+#   #statistic = "mad",
+#   fmt = 2
+# )
+# 
+# modelsummary::modelsummary(
+#   list(
+#     "First model" = causes_model
+#   ),
+#   #statistic = "mad",
+#   fmt = 2
+# )
+# 
+# modelsummary::modelsummary(
+#   list(
+#     "First model" = p_average_model
+#   ),
+#   #statistic = "mad",
+#   fmt = 2
+# )
+# 
+
+
+if (!requireNamespace("modelsummary", quietly = TRUE)) {
+  install.packages("modelsummary")
+}
+library(modelsummary)
 
 if (!requireNamespace("broom.mixed", quietly = TRUE)) {
   install.packages("broom.mixed")
@@ -231,30 +249,24 @@ if (!requireNamespace("broom.mixed", quietly = TRUE)) {
 
 library(broom.mixed)
 
+coef_short_names <- 
+  c("causeAll other forms of chronic ischemic heart disease" = "Ischemic Heart Disease",
+    "causeMalignant neoplasms of trachea, bronchus and lung" = "Trachea/Bronchus/Lung Cancer",
+    "causeOrganic dementia" = "Organic Dementia",
+    "causeOther chronic obstructive pulmonary disease" = "COPD"
+  )
+
 # Summarize the models
 modelsummary(
   list(
-    "Poisson" = cause_of_death_alberta_poisson,
-    "Negative binomial" = cause_of_death_alberta_neg_binomial
+    "Poisson" = poisson_model,
+    "Negative binomial" = first_model
   ),
   coef_map = coef_short_names,
   estimate_function = function(model) {
     broom.mixed::tidy(model, parameters = "all", conf.int = TRUE)
   }
 )
-
-pp_check(first_model) +
-  theme(legend.position = "bottom")
-
-pp_check(poisson_model) +
-  theme(legend.position = "bottom")
-
-pp_stan_neg_binom_model <- pp_check(stan_neg_binom_model)
-pp_stan_neg_binom_model + theme(legend.position = "bottom")
-
-
-pp_stan_poisson_model <- pp_check(stan_poisson_model)
-pp_stan_poisson_model + theme(legend.position = "bottom")
 
 ```
 # Discussion
@@ -298,24 +310,32 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 #| fig-cap: "Examining how the model fits, and is affected by, the data"
 #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-# library(bayesplot)
-# 
-# ppc <- pp_check(p_average_model, type = "dens_overlay")
-# 
-# # Add a classic theme to the plot
-# #ppc + theme_classic()
-# 
-# # Print the plot
-# print(ppc)
-# Create the posterior predictive check plot with the specified theme
-pp_plot <- pp_check(p_average_model, theme = theme_classic()) +
+pp_check(first_model) +
   theme(legend.position = "bottom")
 
-# Create the posterior vs prior plot with the specified theme
-posterior_plot <- posterior_vs_prior(p_average_model, theme = theme_minimal()) +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
+pp_check(poisson_model) +
+  theme(legend.position = "bottom")
+
+pp_stan_neg_binom_model <- pp_check(stan_neg_binom_model)
+pp_stan_neg_binom_model + theme(legend.position = "bottom")
+
+
+pp_stan_poisson_model <- pp_check(stan_poisson_model)
+pp_stan_poisson_model + theme(legend.position = "bottom")
+
+
+pp_check(peak_poisson_model) +
+  theme(legend.position = "bottom")
+
+pp_stan_neg_binom_model <- pp_check(peak_poisson_model)
+pp_stan_neg_binom_model + theme(legend.position = "bottom")
+
+pp_check(peak_neg_binom_model) +
+  theme(legend.position = "bottom")
+
+pp_stan_neg_binom_model <- pp_check(peak_neg_binom_model)
+pp_stan_neg_binom_model + theme(legend.position = "bottom")
+
 ```
 
 ## Diagnostics
