@@ -1,10 +1,11 @@
 ---
-title: "My title"
+title: "Respiration Related Death Cause show Signficant Relation to Increasing "
 subtitle: "My subtitle if needed"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Vanshika Vanshika
+  - Shivank Goel
+  - Navya Hooda
+thanks: "Code and data are available at: https://github.com/shivankgoel003/Mortality-in-Alberta."
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
@@ -50,30 +51,6 @@ Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 #| echo: false
 
 # Plot the regression graph
-ggplot(data, aes(x = total_deaths, y = provincial_average)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Total Deaths", y = "Provincial Average", title = "Regression Graph") +
-  theme_minimal()
-
-
-# Plot the regression graph
-ggplot(data_peak, aes(x = total_deaths, y = provincial_average)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Total Deaths", y = "Provincial Average", title = "Regression Graph") +
-  theme_minimal()
-
-
-# Plot the regression graph
-ggplot(data_peak, aes(x = provincial_average, y = total_deaths)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Graph") +
-  theme_minimal()
-
-
-# Plot the regression graph
 ggplot(data, aes(x = provincial_average, y = total_deaths)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
@@ -81,13 +58,25 @@ ggplot(data, aes(x = provincial_average, y = total_deaths)) +
   theme_minimal()
 
 
+``` 
+
+```{r}
+#| label: fig-bills
+#| fig-cap: Bills of penguins
+#| echo: false
+
 # Plot the regression graph for all lungs causes
 ggplot(data_lung, aes(x = provincial_average, y = total_deaths)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
   labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Lung") +
   theme_minimal()
+```
 
+```{r}
+#| label: fig-bills
+#| fig-cap: Bills of penguins
+#| echo: false
 # Plot the regression graph for all heart causes
 ggplot(data, aes(x = provincial_average, y = total_deaths)) +
   geom_point() +
@@ -109,14 +98,123 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 #| warning: false
 #| message: false
 
-# analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-# 
-# analysis_data |> 
-#   ggplot(aes(x = width, y = length)) +
-#   geom_point(alpha = 0.8) +
-#   theme_minimal() +
-#   labs(x = "Wing width (mm)",
-#        y = "Wing length (mm)")
+# Assuming your data frame is named 'cleaned_avg_PM25_conc' and is already filtered and renamed.
+# Convert factors to character to avoid issues in ggplot
+data[] <- lapply(data, function(x) if(is.factor(x)) as.character(x) else x)
+# Creating the plot with ggplot
+p <- ggplot(data, aes(x = year)) +
+  geom_line(aes(y = provincial_average, colour = "Provincial Average")) +
+  geom_line(aes(y = x10th_percentile, colour = "10th Percentile")) +
+  geom_line(aes(y = x90th_percentile, colour = "90th Percentile")) +
+  labs(title = "Annual Trends of PM2.5 Concentrations in Alberta: Provincial Averages and Percentile Ranges (2012-2021)",
+       x = "Years", y = "PM2.5 Concentration (μg/m³)") +
+  scale_colour_manual(values = c("Provincial Average" = "blue", "10th Percentile" = "green", "90th Percentile" = "red")) +
+  theme_minimal()
+
+# Display the plot
+p
+
+
+
+
+
+library(MASS)
+
+air_quality_data <- air_quality_data[air_quality_data$air_quality_health_index != "10+",]
+air_quality_data$air_quality_health_index <- as.numeric(air_quality_data$air_quality_health_index)
+
+# Calculate the average Air Quality Health Index per year
+average_aqi_by_year <- air_quality_data %>%
+  group_by(year) %>%
+  summarize(average_aqi = mean(air_quality_health_index))
+
+combined_data <- merge(deaths_data, average_aqi_by_year, by = "year")
+
+# Plot scatter plot of mortality rates vs. air quality health index
+ggplot(combined_data, aes(x = average_aqi, y = total_deaths)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~cause) +
+  labs(title = "Scatter Plot of Mortality Rates vs. Air Quality Health Index",
+       x = "Average Air Quality Health Index",
+       y = "Total Deaths")
+
+# Fit the model
+model <- glm.nb(total_deaths ~ average_aqi + factor(year) + factor(cause), data = combined_data)
+
+# Model Diagnostics
+par(mfrow=c(2,2))
+plot(model)
+
+# Add Predictions to the combined data
+# Note: predict() function might throw an error if there are new factor levels in the test set that were not present in the training set
+# To prevent this, the newdata argument should only include levels that were present in the model fitting
+combined_data$predicted_deaths <- predict(model, newdata = combined_data, type = "response")
+
+# Plot Observed vs. Predicted Deaths
+ggplot(combined_data, aes(x = total_deaths, y = predicted_deaths)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  labs(x = "Observed Deaths", y = "Predicted Deaths") +
+  theme_minimal()
+
+# Effect of AQHI on Predicted Deaths
+ggplot(combined_data, aes(x = average_aqi, y = predicted_deaths, color = factor(year))) +
+  geom_point() +
+  geom_line(aes(group = factor(year))) + # Adding lines to connect points by year
+  labs(x = "Average Air Quality Health Index", y = "Predicted Deaths") +
+  theme_minimal() +
+  facet_wrap(~cause)
+
+
+
+
+# Merge datasets on 'year'
+combined_data <- merge(deaths_data, average_aqi_by_year, by = "year")
+
+# Plot scatter plot of mortality rates vs. air quality health index
+ggplot(combined_data, aes(x = average_aqi, y = total_deaths)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~cause) +
+  labs(title = "Scatter Plot of Mortality Rates vs. Air Quality Health Index",
+       x = "Average Air Quality Health Index",
+       y = "Total Deaths")
+
+
+
+# Summarize total deaths for each disease by year
+total_deaths_by_year <- deaths_data %>%
+  group_by(year, cause) %>%
+  summarize(total_deaths = sum(total_deaths))
+
+# Plot for mortality data
+ggplot(total_deaths_by_year, aes(x = as.factor(year), y = total_deaths, group = cause, color = cause)) +
+  geom_line() +
+  labs(title = "Total Deaths by Year for Each Disease",
+       x = "Year",
+       y = "Total Deaths")
+
+
+# Ensure the 'year' column is in numeric format for proper line plotting
+average_aqi_by_year$year <- as.numeric(as.character(average_aqi_by_year$year))
+
+# Plotting with ggplot2
+ggplot(average_aqi_by_year, aes(x = year, y = average_aqi)) +
+  geom_line() +  # for lines
+  geom_point() + # for points
+  labs(title = "Average Air Quality Health Index by Year",
+       x = "Year",
+       y = "Average Air Quality Index") +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) # Optional: Adjust x-axis breaks
+
+ggplot(average_aqi_by_year, aes(x = as.factor(year), y = average_aqi, fill = as.factor(year))) +
+  geom_bar(stat = "identity") +
+  labs(title = "Average Air Quality Health Index by Year",
+       x = "Year",
+       y = "Average AQHI") +
+  theme_minimal()
+
 ```
 
 Talk way more about it. 
@@ -161,22 +259,6 @@ Our results are summarized in @tbl-modelresults.
 #| eval: true
 #| warning: false
 #| message: false
-# 
-# library(rstanarm)
-# 
-# first_model <-
-#   readRDS(file = here::here("models/first_model.rds"))
-# 
-# poisson_model <-
-#   readRDS(file = here::here("models/poisson_model.rds"))
-# 
-# causes_model <-
-#   readRDS(file = here::here("models/causes_model.rds"))
-# 
-# p_average_model <-
-#   readRDS(file = here::here("models/p_average_model.rds"))
-# 
-
 
 library(rstanarm)
 library(here)
@@ -187,8 +269,11 @@ library(modelsummary)
 neg_binom_model <- readRDS(file = here::here("models/neg_binom_model.rds"))
 stan_neg_binom_model <- readRDS(file = here::here("models/stan_neg_binom_model.rds"))
 stan_poisson_model <-readRDS(file = here::here("models/stan_poisson_model.rds"))
-peak_neg_binom_model <- readRDS(file = here::here("models/peak_neg_binom_model.rds"))
-peak_poisson_model <-readRDS(file = here::here("models/peak_poisson_model.rds"))
+
+heart_model <- readRDS(file = here::here("models/heart_model.rds"))
+lung_model <-readRDS(file = here::here("models/lung_model.rds"))
+
+
 first_model <-
   readRDS(file = here::here("models/first_model.rds"))
 
@@ -201,41 +286,26 @@ poisson_model <-
 #| echo: false
 #| eval: true
 #| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
+#| tbl-cap: "Model of "
 #| warning: false
 library(modelsummary)
-# modelsummary::modelsummary(
-#   list(
-#     "First model" = first_model
-#   ),
-#   #statistic = "mad",
-#   fmt = 2
-# )
-# 
-# modelsummary::modelsummary(
-#   list(
-#     "First model" = poisson_model
-#   ),
-#   #statistic = "mad",
-#   fmt = 2
-# )
-# 
-# modelsummary::modelsummary(
-#   list(
-#     "First model" = causes_model
-#   ),
-#   #statistic = "mad",
-#   fmt = 2
-# )
-# 
-# modelsummary::modelsummary(
-#   list(
-#     "First model" = p_average_model
-#   ),
-#   #statistic = "mad",
-#   fmt = 2
-# )
-# 
+
+modelsummary::modelsummary(
+  list(
+    "heart causes model" = heart_model
+  ),
+  #statistic = "mad",
+  fmt = 2
+)
+
+modelsummary::modelsummary(
+  list(
+    "Lung Causes model" = lung_model
+  ),
+  #statistic = "mad",
+  fmt = 2
+)
+
 
 
 if (!requireNamespace("modelsummary", quietly = TRUE)) {
@@ -324,17 +394,11 @@ pp_stan_poisson_model <- pp_check(stan_poisson_model)
 pp_stan_poisson_model + theme(legend.position = "bottom")
 
 
-pp_check(peak_poisson_model) +
+pp_check(heart_model) +
   theme(legend.position = "bottom")
 
-pp_stan_neg_binom_model <- pp_check(peak_poisson_model)
-pp_stan_neg_binom_model + theme(legend.position = "bottom")
-
-pp_check(peak_neg_binom_model) +
+pp_check(lung_model) +
   theme(legend.position = "bottom")
-
-pp_stan_neg_binom_model <- pp_check(peak_neg_binom_model)
-pp_stan_neg_binom_model + theme(legend.position = "bottom")
 
 ```
 
@@ -357,6 +421,10 @@ pp_stan_neg_binom_model + theme(legend.position = "bottom")
 plot(first_model, "trace")
 
 plot(first_model, "rhat")
+
+plot(stan_neg_binom_model, "trace")
+
+plot(stan_neg_binom_model, "rhat")
 ```
 
 

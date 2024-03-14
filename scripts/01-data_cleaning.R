@@ -1,6 +1,6 @@
 #### Preamble ####
 # Purpose: Cleans the two data sets for the years 2018 to 2021
-# Author: Navya Gupta, Shivank Goel, Vanshika Vanshika
+# Author: Navya Hooda, Shivank Goel, Vanshika Vanshika
 # Date: 07 March 2024 
 # Contact: shivankg.goel@mail.utoronto.ca
 # License: MIT
@@ -59,7 +59,7 @@ write.csv(cleaned_data, file = "data/analysis_data/cleaned_air_data.csv", row.na
 
 
 # Filter the data to include only rows where the Cause is "Acute myocardial infarction" or "Malignant neoplasms of trachea, bronchus and lung"
-filtered_df <- df[df$Cause %in% c("Malignant neoplasms of trachea, bronchus and lung"), ]
+filtered_df <- df[df$Cause %in% c("Malignant neoplasms of trachea, bronchus and lung", "Acute myocardial infarction", "Malignant neoplasms of trachea, bronchus and lung", "Other chronic obstructive pulmonary disease", "All other forms of chronic ischemic heart disease"), ]
 
 # Select only the necessary columns: Year, Cause, Ranking, and Total Deaths
 cleaned_df <- filtered_df[, c("Calendar Year", "Cause", "Ranking", "Total Deaths")]
@@ -71,10 +71,10 @@ cleaned_df <- cleaned_df %>%
 cleaned_df = clean_names(cleaned_df)
 
 chart <- read.csv("data/raw_data/chart.csv")
-
+chart
 names(chart)[1] <- "year"
 # Select only the necessary columns: Year, Cause, Ranking, and Total Deaths
-chart <- chart [, c("year", "Provincial.Average")]
+chart <- chart [, c("year", "Provincial.Average", "X10th.Percentile","X90th.Percentile","CAAQS")]
 chart <- chart %>%
   filter(`year` >= 2001)
 chart = clean_names(chart)
