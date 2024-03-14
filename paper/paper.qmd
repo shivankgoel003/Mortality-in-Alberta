@@ -165,7 +165,7 @@ p_average_model <-
 #| label: tbl-modelresults
 #| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
 #| warning: false
-
+library(modelsummary)
 modelsummary::modelsummary(
   list(
     "First model" = first_model
@@ -199,8 +199,64 @@ modelsummary::modelsummary(
 )
 ```
 
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-ppcheckandposteriorvsprior
+#| layout-ncol: 2
+#| fig-cap: "Examining how the model fits, and is affected by, the data"
+#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
+
+library(rstanarm)
+library(here)
+library(ggplot2)
+library(modelsummary)
+
+# Assuming you've already read your models as before
+neg_binom_model <- readRDS(file = here::here("models/neg_binom_model.rds"))
+stan_neg_binom_model <- readRDS(file = here::here("models/stan_neg_binom_model.rds"))
+stan_poisson_model <-readRDS(file = here::here("models/stan_poisson_model.rds"))
+first_model <-
+  readRDS(file = here::here("models/first_model.rds"))
+
+poisson_model <-
+  readRDS(file = here::here("models/poisson_model.rds"))
 
 
+if (!requireNamespace("broom.mixed", quietly = TRUE)) {
+  install.packages("broom.mixed")
+}
+
+library(broom.mixed)
+
+# Summarize the models
+modelsummary(
+  list(
+    "Poisson" = cause_of_death_alberta_poisson,
+    "Negative binomial" = cause_of_death_alberta_neg_binomial
+  ),
+  coef_map = coef_short_names,
+  estimate_function = function(model) {
+    broom.mixed::tidy(model, parameters = "all", conf.int = TRUE)
+  }
+)
+
+pp_check(first_model) +
+  theme(legend.position = "bottom")
+
+pp_check(poisson_model) +
+  theme(legend.position = "bottom")
+
+pp_stan_neg_binom_model <- pp_check(stan_neg_binom_model)
+pp_stan_neg_binom_model + theme(legend.position = "bottom")
+
+
+pp_stan_poisson_model <- pp_check(stan_poisson_model)
+pp_stan_poisson_model + theme(legend.position = "bottom")
+
+```
 # Discussion
 
 ## First discussion point {#sec-first-point}
@@ -242,9 +298,15 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 #| fig-cap: "Examining how the model fits, and is affected by, the data"
 #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(p_average_model) +
-  theme(legend.position = "bottom")
-
+# library(bayesplot)
+# 
+# ppc <- pp_check(p_average_model, type = "dens_overlay")
+# 
+# # Add a classic theme to the plot
+# #ppc + theme_classic()
+# 
+# # Print the plot
+# print(ppc)
 # Create the posterior predictive check plot with the specified theme
 pp_plot <- pp_check(p_average_model, theme = theme_classic()) +
   theme(legend.position = "bottom")

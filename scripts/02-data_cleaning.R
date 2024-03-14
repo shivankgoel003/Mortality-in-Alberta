@@ -86,6 +86,8 @@ merged_data <- merge(cleaned_df, chart, by.x = "year", by.y = "year", all.x = TR
 write.csv(merged_data, file = "data/analysis_data/cleaned_chart_data.csv", row.names = FALSE)
 
 
+
+
 ## P2.5 PEAK GRAPHS
 
 chart <- read.csv("data/raw_data/ppeak.csv")
@@ -103,3 +105,78 @@ merged_data <- merge(cleaned_df, chart, by.x = "year", by.y = "year", all.x = TR
 # Save the cleaned dataset to a CSV file
 write.csv(merged_data, file = "data/analysis_data/cleaned_peak_data.csv", row.names = FALSE)
 
+
+## merge files for all the lung causes 
+
+# Filter the data to include only rows where the Cause is "Acute myocardial infarction" or "Malignant neoplasms of trachea, bronchus and lung"
+filtered_df <- df[df$Cause %in% c("Malignant neoplasms of trachea, bronchus and lung", "Other chronic obstructive pulmonary disease" ), ]
+
+filtered_df
+# Select only the necessary columns: Year, Cause, Ranking, and Total Deaths
+cleaned_df <- filtered_df[, c("Calendar Year", "Cause", "Ranking", "Total Deaths")]
+
+# Rename the columns
+colnames(cleaned_df) <- c("Year", "Cause", "Ranking", "Total Deaths")
+cleaned_df <- cleaned_df %>%
+  filter(`Year` < 2022)
+cleaned_df = clean_names(cleaned_df)
+
+# Group by year and sum the total deaths
+cleaned_df <- cleaned_df %>%
+  group_by(year) %>%
+  summarise(total_deaths = sum(total_deaths))
+
+chart <- read.csv("data/raw_data/chart.csv")
+
+names(chart)[1] <- "year"
+# Select only the necessary columns: Year, Cause, Ranking, and Total Deaths
+chart <- chart [, c("year", "Provincial.Average")]
+chart <- chart %>%
+  filter(`year` >= 2001)
+chart = clean_names(chart)
+
+# Merge datasets based on the year column
+merged_data <- merge(cleaned_df, chart, by.x = "year", by.y = "year", all.x = TRUE)
+
+# Save the cleaned dataset to a CSV file
+write.csv(merged_data, file = "data/analysis_data/merged_data.csv", row.names = FALSE)
+
+
+
+
+
+## merge files for all the heart causes 
+
+# Filter the data to include only rows where the Cause is "Acute myocardial infarction" or "Malignant neoplasms of trachea, bronchus and lung"
+filtered_df1 <- df[df$Cause %in% c("Acute myocardial infarction",
+                                  "All other forms of chronic ischemic heart disease" ), ]
+
+filtered_df1
+# Select only the necessary columns: Year, Cause, Ranking, and Total Deaths
+cleaned_df <- filtered_df1[, c("Calendar Year", "Cause", "Ranking", "Total Deaths")]
+
+# Rename the columns
+colnames(cleaned_df) <- c("Year", "Cause", "Ranking", "Total Deaths")
+cleaned_df <- cleaned_df %>%
+  filter(`Year` < 2022)
+cleaned_df = clean_names(cleaned_df)
+
+# Group by year and sum the total deaths
+cleaned_df <- cleaned_df %>%
+  group_by(year) %>%
+  summarise(total_deaths = sum(total_deaths))
+
+chart <- read.csv("data/raw_data/chart.csv")
+
+names(chart)[1] <- "year"
+# Select only the necessary columns: Year, Cause, Ranking, and Total Deaths
+chart <- chart [, c("year", "Provincial.Average")]
+chart <- chart %>%
+  filter(`year` >= 2001)
+chart = clean_names(chart)
+
+# Merge datasets based on the year column
+merged_data <- merge(cleaned_df, chart, by.x = "year", by.y = "year", all.x = TRUE)
+
+# Save the cleaned dataset to a CSV file
+write.csv(merged_data, file = "data/analysis_data/merged_heart_data.csv", row.names = FALSE)
