@@ -59,7 +59,15 @@ heart_model <- stan_glm(total_deaths ~ provincial_average, data = heart,
 lung_model <- stan_glm(total_deaths ~ provincial_average, data = lung, 
                        family = neg_binomial_2(link = "log"), seed = 853)
 
+# Convert 'cause' variable to factor with levels
+alberta_cod$cause <- factor(alberta_cod$cause)
 
+# Check the levels of the 'cause' variable
+levels(alberta_cod$cause)
+
+
+# Check the structure of the alberta_cod dataset
+str(alberta_cod)
 #### Save model ####
 saveRDS(neg_binom_model, "models/neg_binom_model.rds")
 saveRDS(stan_neg_binom_model, "models/stan_neg_binom_model.rds")
