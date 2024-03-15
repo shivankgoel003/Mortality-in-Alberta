@@ -1,5 +1,5 @@
 ---
-title: "Respiration Related Death Cause show Signficant Relation to Increasing "
+title: "Respiratory Related Deaths Show Positive Relation to Increasing Air Pollution"
 subtitle: "My subtitle if needed"
 author: 
   - Vanshika Vanshika
@@ -46,42 +46,45 @@ The remainder of this paper is structured as follows. @sec-data....
 Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: fig-all
+#| fig-cap: Provincial Average PM2.5 Quantity Vs Total Deaths
 #| echo: false
+#| warning: false
 
 # Plot the regression graph
 ggplot(data, aes(x = provincial_average, y = total_deaths)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Graph") +
+  labs(x = "Provincial Average PM2.5", y = "Total Deaths") +
   theme_minimal()
 
 
 ``` 
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: fig-lung
+#| fig-cap: Lung Related Causes Mortality Rates vs Average PM2.5 Quantity 
 #| echo: false
+#| warning: false
 
 # Plot the regression graph for all lungs causes
 ggplot(data_lung, aes(x = provincial_average, y = total_deaths)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Lung") +
+  labs(x = "Provincial Average", y = "Total Deaths") +
   theme_minimal()
 ```
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: fig-heart
+#| fig-cap: Heart Related Causes Mortality Rates vs Average PM2.5 Quantity 
 #| echo: false
+#| warning: false
 # Plot the regression graph for all heart causes
 ggplot(data, aes(x = provincial_average, y = total_deaths)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Provincial Average", y = "Total Deaths", title = "Regression Heart") +
+  labs(x = "Provincial Average", y = "Total Deaths") +
   theme_minimal()
 
 
@@ -92,8 +95,8 @@ Talk more about it.
 And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
 
 ```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
+#| label: fig-annual
+#| fig-cap: Annual Trends of PM2.5 Concentrations in Alberta
 #| echo: false
 #| warning: false
 #| message: false
@@ -106,16 +109,20 @@ p <- ggplot(data, aes(x = year)) +
   geom_line(aes(y = provincial_average, colour = "Provincial Average")) +
   geom_line(aes(y = x10th_percentile, colour = "10th Percentile")) +
   geom_line(aes(y = x90th_percentile, colour = "90th Percentile")) +
-  labs(title = "Annual Trends of PM2.5 Concentrations in Alberta: Provincial Averages and Percentile Ranges (2012-2021)",
-       x = "Years", y = "PM2.5 Concentration (μg/m³)") +
+  labs(x = "Years", y = "PM2.5 Concentration (μg/m³)") +
   scale_colour_manual(values = c("Provincial Average" = "blue", "10th Percentile" = "green", "90th Percentile" = "red")) +
   theme_minimal()
 
 # Display the plot
 p
+```
 
-
-
+```{r}
+#| label: fig-four
+#| fig-cap: Mortality Rates vs. Air Quality Health Index
+#| echo: false
+#| warning: false
+#| message: false
 
 
 library(MASS)
@@ -135,16 +142,30 @@ ggplot(combined_data, aes(x = average_aqi, y = total_deaths)) +
   geom_point() +
   geom_smooth(method = "lm") +
   facet_wrap(~cause) +
-  labs(title = "Scatter Plot of Mortality Rates vs. Air Quality Health Index",
+  labs(
        x = "Average Air Quality Health Index",
        y = "Total Deaths")
+```
 
+```{r}
+#| label: fig-fakemodel
+#| fig-cap: Model data
+#| echo: false
+#| warning: false
+#| message: false
 # Fit the model
 model <- glm.nb(total_deaths ~ average_aqi + factor(year) + factor(cause), data = combined_data)
 
 # Model Diagnostics
 par(mfrow=c(2,2))
 plot(model)
+```
+```{r}
+#| label: fig-fakeprediction
+#| fig-cap: Prediction of deaths based on the model
+#| echo: false
+#| warning: false
+#| message: false
 
 # Add Predictions to the combined data
 # Note: predict() function might throw an error if there are new factor levels in the test set that were not present in the training set
@@ -157,7 +178,15 @@ ggplot(combined_data, aes(x = total_deaths, y = predicted_deaths)) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
   labs(x = "Observed Deaths", y = "Predicted Deaths") +
   theme_minimal()
+```
 
+
+```{r}
+#| label: fig-plane
+#| fig-cap: Relationship between wing length and width
+#| echo: false
+#| warning: false
+#| message: false
 # Effect of AQHI on Predicted Deaths
 ggplot(combined_data, aes(x = average_aqi, y = predicted_deaths, color = factor(year))) +
   geom_point() +
@@ -165,23 +194,15 @@ ggplot(combined_data, aes(x = average_aqi, y = predicted_deaths, color = factor(
   labs(x = "Average Air Quality Health Index", y = "Predicted Deaths") +
   theme_minimal() +
   facet_wrap(~cause)
+```
 
 
-
-
-# Merge datasets on 'year'
-combined_data <- merge(deaths_data, average_aqi_by_year, by = "year")
-
-# Plot scatter plot of mortality rates vs. air quality health index
-ggplot(combined_data, aes(x = average_aqi, y = total_deaths)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  facet_wrap(~cause) +
-  labs(title = "Scatter Plot of Mortality Rates vs. Air Quality Health Index",
-       x = "Average Air Quality Health Index",
-       y = "Total Deaths")
-
-
+```{r}
+#| label: fig-cause
+#| fig-cap: Total Deaths by Year for Each Cause
+#| echo: false
+#| warning: false
+#| message: false
 
 # Summarize total deaths for each disease by year
 total_deaths_by_year <- deaths_data %>%
@@ -191,11 +212,20 @@ total_deaths_by_year <- deaths_data %>%
 # Plot for mortality data
 ggplot(total_deaths_by_year, aes(x = as.factor(year), y = total_deaths, group = cause, color = cause)) +
   geom_line() +
-  labs(title = "Total Deaths by Year for Each Disease",
+  labs(
        x = "Year",
-       y = "Total Deaths")
+       y = "Total Deaths") +
+  theme(legend.position = "top") +
+  theme(legend.text = element_text(size = 5)) +
+  guides(color = guide_legend(direction = "vertical"))
+```
 
-
+```{r}
+#| label: fig-average_air
+#| fig-cap: Average Air Quality Health Index by Year
+#| echo: false
+#| warning: false
+#| message: false
 # Ensure the 'year' column is in numeric format for proper line plotting
 average_aqi_by_year$year <- as.numeric(as.character(average_aqi_by_year$year))
 
@@ -203,14 +233,20 @@ average_aqi_by_year$year <- as.numeric(as.character(average_aqi_by_year$year))
 ggplot(average_aqi_by_year, aes(x = year, y = average_aqi)) +
   geom_line() +  # for lines
   geom_point() + # for points
-  labs(title = "Average Air Quality Health Index by Year",
+  labs(
        x = "Year",
        y = "Average Air Quality Index") +
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) # Optional: Adjust x-axis breaks
-
+```
+```{r}
+#| label: fig-average_extra
+#| fig-cap: Average Air Quality Health Index by Year
+#| echo: false
+#| warning: false
+#| message: false
 ggplot(average_aqi_by_year, aes(x = as.factor(year), y = average_aqi, fill = as.factor(year))) +
   geom_bar(stat = "identity") +
-  labs(title = "Average Air Quality Health Index by Year",
+  labs(
        x = "Year",
        y = "Average AQHI") +
   theme_minimal()
@@ -231,13 +267,12 @@ Here we briefly describe the Bayesian analysis model used to investigate... Back
 
 Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
 
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
+\begin{align}
+y_i | \mu_i, \phi &\sim \text{NegBin}(\mu_i, \phi) \\
+\mu_i &= \exp(\alpha + \beta x_i) \\
+\alpha &\sim \text{Normal}(0, 2.5) \\
+\beta &\sim \text{Normal}(0, 2.5) \\
+\phi &\sim \text{Exponential}(1)
 \end{align}
 
 We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
@@ -285,28 +320,10 @@ poisson_model <-
 ```{r}
 #| echo: false
 #| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Model of "
+#| label: tbl-modelcauses
+#| tbl-cap: "Different causes of mortality and their death counts"
 #| warning: false
 library(modelsummary)
-
-modelsummary::modelsummary(
-  list(
-    "heart causes model" = heart_model
-  ),
-  #statistic = "mad",
-  fmt = 2
-)
-
-modelsummary::modelsummary(
-  list(
-    "Lung Causes model" = lung_model
-  ),
-  #statistic = "mad",
-  fmt = 2
-)
-
-
 
 if (!requireNamespace("modelsummary", quietly = TRUE)) {
   install.packages("modelsummary")
@@ -337,6 +354,40 @@ modelsummary(
     broom.mixed::tidy(model, parameters = "all", conf.int = TRUE)
   }
 )
+
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-modelheart
+#| tbl-cap: "Heart related causes death count and the air quality"
+#| warning: false
+
+modelsummary::modelsummary(
+  list(
+    "heart causes model" = heart_model
+  ),
+  #statistic = "mad",
+  fmt = 2
+)
+
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-modellung
+#| tbl-cap: "Lung related causes death count and the air quality"
+#| warning: false
+modelsummary::modelsummary(
+  list(
+    "Lung Causes model" = lung_model
+  ),
+  #statistic = "mad",
+  fmt = 2
+)
+
 
 ```
 # Discussion
@@ -375,7 +426,7 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 #| echo: false
 #| message: false
 #| warning: false
-#| label: fig-ppcheckandposteriorvsprior
+#| label: fig-ppcheckfirst
 #| layout-ncol: 2
 #| fig-cap: "Examining how the model fits, and is affected by, the data"
 #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
@@ -383,8 +434,21 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 pp_check(first_model) +
   theme(legend.position = "bottom")
 
+
+
 pp_check(poisson_model) +
   theme(legend.position = "bottom")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-ppcheckneg
+#| layout-ncol: 2
+#| fig-cap: "Examining how the model fits, and is affected by, the data"
+#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
 pp_stan_neg_binom_model <- pp_check(stan_neg_binom_model)
 pp_stan_neg_binom_model + theme(legend.position = "bottom")
@@ -392,6 +456,17 @@ pp_stan_neg_binom_model + theme(legend.position = "bottom")
 
 pp_stan_poisson_model <- pp_check(stan_poisson_model)
 pp_stan_poisson_model + theme(legend.position = "bottom")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-ppcheckheartlung
+#| layout-ncol: 2
+#| fig-cap: "Examining how the model fits, and is affected by, the data"
+#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
 
 pp_check(heart_model) +
