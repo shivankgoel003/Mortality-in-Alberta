@@ -7,7 +7,7 @@ This repository contains the data analysis for our research conducted on the imp
 ## Data and Methodology
 The study focuses on the use of negative binomial regression to model the count data of mortality rates against the air quality indicators in Alberta. The datasets for AQHI and mortality rates have been sourced from the provincial open data portals and official resources of Alberta. The raw data can be found under `data/raw_data`
 
-# Authors and Acknowledgements
+## Authors and Acknowledgements
 The paper is a collaborative effort by Vanshika Vanshika, Shivank Goel, and Navya Hooda. We extend our gratitude to the academic community and the data providers for their contributions to this research.
 
 
