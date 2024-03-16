@@ -8,7 +8,7 @@ author:
 thanks: "Code and data are available at: https://github.com/shivankgoel003/Mortality-in-Alberta."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "Air pollution's severe health impact on human respiratory and cardiac systems is a growing public health issue. The fine particulate matter (PM2.5) arise a primary concern due to its deep lung penetration and systemic effects. This research uses data from Alberta, Canada, to study the connection between PM2.5 levels as measured by the Air Quality Health Index (AQHI),  and the number of deaths from certain heart and lung diseases. We utilized statistical models, and identified a strong association between increased PM2.5 levels and higher mortality from these diseases. These findings suggest that there is an immediate need for health policies that address air quality improvements to safeguard public health for Alberta and beyond."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -62,121 +62,7 @@ Additionally, the study utilizes PM2.5 air pollutant concentration level data so
 The following subsections outline the sources, collection methodologies, and data-cleaning procedures implemented to ensure the accuracy and reliability of the datasets used in the analysis. This meticulous approach ensures that the data is prepared for thorough analysis, facilitating the exploration of correlations between air quality indicators and mortality rates in Alberta.
 
 
-**Leading Causes of Death in Alberta Data**: The disease data is found from the government of Alberta’s open data portal @alberta, and was last updated on September 22, 2023 and continues to be updated annually.  This dataset encompasses mortality data related to the top 30 common causes of death. It reports on types of diseases, causes of death, mortality denoted by total death counts, and ranking for 2000-2022.  Due to our focus on respiratory illnesses, in the leading cause of death dataset, we grouped diseases by categories. Our category of focus included filtering on illnesses like acute myocardial infarction, malignant neoplasms of the trachea, bronchus, and lung, other chronic obstructive pulmonary disease, and all other forms of chronic ischemic heart disease. Leading causes of death are measured and ranked by the top 30 most common death causes each specific year. The causes of death are classified based on the International Classification of Diseases 10th Edition.
-
-
-**AQHI Data**: The second dataset we used is the air quality health index (AQHI) dataset found at the government of Alberta’s open data portal @alberta. This dataset contains AQHI by municipality for the years 2012-2022 and reports air quality health index, and health risk both quantitatively and qualitatively. To use the AQHI dataset we employed simple data-cleaning practice to maintain descriptive variable names and readability. The data is measured by the percentage of hours for each year at a given air quality level, by municipality. The Air Quality Health Index is calculated based on the relative risks of a combination of common air pollutants that is known to harm human health. These pollutants are ozone (O3) at ground level, particulate matter (PM2.5), and nitrogen dioxide (NO2). Risks are defined as follows: 1-3 High Quality; 4-6 Moderate Quality; 7-9 Low Quality; 10+ Very Low Quality.
-
-**PM2.5 Data**: We used the PM2.5 data set retrieved from @alberta which was last updated in April 2023. It reports on average PM2.5 concentration levels through the years 2000-2021 using a provincial average, the 10th percentile quantities, and the 90th percentile quantities, with a focus on 8 municipalities Edmonton, Fort McMurray, Grande Prairie, Lethbridge, Medicine Hat, and Red Deer respectively and lastly reports the Canadian Ambient Air Quality Standard (CAAQS) value. 
-
-The Alberta Air Zone report @report, which is linked to our dataset, provides a detailed explanation of the measurement and processing of the PM2.5 quantity. Alberta Air Zones divides Alberta into six air zones which are aligned with Alberta’s Land-use Framework regional boundaries. Ambient air quality in Alberta is monitored at continuous air monitoring stations located within these air zones. PM2.5 quantities are taken throughout these stations across Alberta, and they measure the quantities in µg (micrograms per cubic meter of air).  
-
-## Data Cleaning 
-
-We used R [@citeR] for data cleaning and processing, utilizing packages like tidyverse [@tidy] for data manipulation and janitor [@jan] for cleaning column names. Other packages used includes `ggplot2` [@ggplot], `dplyr` [@dp], `readr` [@read], `tibble` [@tib], `janitor` [@jan],`reshape2` [@reshape], `knitr` [@knit], `ggbeeswarm` [@gg], `ggrepel` [@repel], `kableExtra`[@kable], `readxl`[@readxl], `MASS`[@mass], `rstanarm`[@rstan], `modelsummary`[@model] and `here` [@here].
-
-The raw air quality data were preprocessed to remove inconsistencies and irrelevant information. Specifically, we filtered the dataset to include observations from the years 2012 to 2021, which are relevant to our analysis. Additionally, we merged this dataset with additional information on peak pollution levels for analysis.
-
-Similar to the previous datasets, the raw mortality data underwent cleaning procedures to focus on specific causes relevant to our analysis. We filtered the dataset to include observations up to 2021 and merged it with additional information on air quality for correlation analysis. 
-
-The raw data on AQHI were filtered to include observations from the years 2011 to 2021 for consistency with other datasets. Additionally, the data were aggregated at the municipal level for further analysis. 
-
-
-## Data Modifications
-
-In this study, we constructed unique datasets by thoughtfully selecting and merging data from the Government of Alberta's open data portal, Alberta.ca, spanning the years 2012 to 2022. Our process involved merging variables from various datasets to create specific datasets tailored for model building and analysis.
-One such dataset, 'cleaned_chart_data,' was created by merging variables such as causes of death, total deaths, provincial average PM2.5 levels, and CAAQS. This dataset was designed to facilitate our analysis of any significant correlations between these variables. A snapshot of this data is referenced in Table X. 
-Additionally, we derived two other datasets, 'merged_data' and 'merged_heart_data,' by merging variables related to heart disease numbers, lung disease numbers, and provincial average PM2.5 values. These datasets were instrumental in examining the impact of PM2.5 on each type of illness, as previously discussed.
-Overall, our methodology ensured the creation of merged datasets that allowed for a detailed investigation into the relationships between PM2.5 levels and various health outcomes in Alberta. 
-
-
-```{r}
-#| label: fig-lung
-#| fig-cap: Lung Related Causes Mortality Rates vs Average PM2.5 Quantity 
-#| echo: false
-#| warning: false
-
-# Plot the regression graph for all lungs causes
-ggplot(data_lung, aes(x = provincial_average, y = total_deaths)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Provincial Average", y = "Total Deaths") +
-  theme_minimal()
-```
-
-```{r}
-#| label: fig-heart
-#| fig-cap: Heart Related Causes Mortality Rates vs Average PM2.5 Quantity 
-#| echo: false
-#| warning: false
-# Plot the regression graph for all heart causes
-ggplot(data, aes(x = provincial_average, y = total_deaths)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
-  labs(x = "Provincial Average", y = "Total Deaths") +
-  theme_minimal()
-
-
-```
-
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
-
-```{r}
-#| label: fig-annual
-#| fig-cap: Annual Trends of PM2.5 Concentrations in Alberta
-#| echo: false
-#| warning: false
-#| message: false
-
-# Assuming your data frame is named 'cleaned_avg_PM25_conc' and is already filtered and renamed.
-# Convert factors to character to avoid issues in ggplot
-data[] <- lapply(data, function(x) if(is.factor(x)) as.character(x) else x)
-# Creating the plot with ggplot
-p <- ggplot(data, aes(x = year)) +
-  geom_line(aes(y = provincial_average, colour = "Provincial Average")) +
-  geom_line(aes(y = x10th_percentile, colour = "10th Percentile")) +
-  geom_line(aes(y = x90th_percentile, colour = "90th Percentile")) +
-  labs(x = "Years", y = "PM2.5 Concentration (μg/m³)") +
-  scale_colour_manual(values = c("Provincial Average" = "blue", "10th Percentile" = "green", "90th Percentile" = "red")) +
-  theme_minimal()
-
-# Display the plot
-p
-```
-
-```{r}
-#| label: fig-four
-#| fig-cap: Mortality Rates vs. Air Quality Health Index
-#| echo: false
-#| warning: false
-#| message: false
-
-
-library(MASS)
-
-air_quality_data <- air_quality_data[air_quality_data$air_quality_health_index != "10+",]
-air_quality_data$air_quality_health_index <- as.numeric(air_quality_data$air_quality_health_index)
-
-# Calculate the average Air Quality Health Index per year
-average_aqi_by_year <- air_quality_data %>%
-  group_by(year) %>%
-  summarize(average_aqi = mean(air_quality_health_index))
-
-combined_data <- merge(deaths_data, average_aqi_by_year, by = "year")
-
-# Plot scatter plot of mortality rates vs. air quality health index
-ggplot(combined_data, aes(x = average_aqi, y = total_deaths)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  facet_wrap(~cause) +
-  labs(
-       x = "Average Air Quality Health Index",
-       y = "Total Deaths")
-```
-
-
+**Leading Causes of Death in Alberta Data**: The disease data is found from the government of Alberta’s open data portal @alberta, and was last updated on September 22, 2023 and continues to be updated annually.  This dataset encompasses mortality data related to the top 30 common causes of death. It reports on types of diseases, causes of death, mortality denoted by total death counts, and ranking for 2000-2022.  Due to our focus on respiratory illnesses, in the leading cause of death dataset, we grouped diseases by categories. Our category of focus included filtering on illnesses like acute myocardial infarction, malignant neoplasms of the trachea, bronchus, and lung, other chronic obstructive pulmonary disease, and all other forms of chronic ischemic heart disease as seen in @fig-cause. Leading causes of death are measured and ranked by the top 30 most common death causes each specific year. The causes of death are classified based on the International Classification of Diseases 10th Edition.
 
 ```{r}
 #| label: fig-cause
@@ -202,24 +88,108 @@ ggplot(total_deaths_by_year, aes(x = as.factor(year), y = total_deaths, group = 
 
 ```
 
+**AQHI Data**: The second dataset we used is the air quality health index (AQHI) dataset found at the government of Alberta’s open data portal @alberta. This dataset contains AQHI by municipality for the years 2012-2022 and reports air quality health index, and health risk both quantitatively and qualitatively. To use the AQHI dataset we employed simple data-cleaning practice to maintain descriptive variable names and readability. The data is measured by the percentage of hours for each year at a given air quality level, by municipality. The Air Quality Health Index is calculated based on the relative risks of a combination of common air pollutants that is known to harm human health. These pollutants are ozone (O3) at ground level, particulate matter (PM2.5), and nitrogen dioxide (NO2). Risks are defined as follows: 1-3 High Quality; 4-6 Moderate Quality; 7-9 Low Quality; 10+ Very Low Quality.
+
+
+**PM2.5 Data**: We used the PM2.5 data set retrieved from @alberta which was last updated in April 2023. It reports on average PM2.5 concentration levels through the years 2000-2021 using a provincial average, the 10th percentile quantities, and the 90th percentile quantities, with a focus on 8 municipalities Edmonton, Fort McMurray, Grande Prairie, Lethbridge, Medicine Hat, and Red Deer respectively and lastly reports the Canadian Ambient Air Quality Standard (CAAQS) value. The trends of the PM2.5 concentration levels over the years can be seen in @fig-annual.
+
 ```{r}
-#| label: fig-average_air
-#| fig-cap: Average Air Quality Health Index by Year
+#| label: fig-annual
+#| fig-cap: Annual Trends of PM2.5 Concentrations in Alberta
 #| echo: false
 #| warning: false
 #| message: false
-# Ensure the 'year' column is in numeric format for proper line plotting
-average_aqi_by_year$year <- as.numeric(as.character(average_aqi_by_year$year))
 
-# Plotting with ggplot2
-ggplot(average_aqi_by_year, aes(x = year, y = average_aqi)) +
-  geom_line() +  # for lines
-  geom_point() + # for points
-  labs(
-       x = "Year",
-       y = "Average Air Quality Index") +
-  scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) # Optional: Adjust x-axis breaks
+# Assuming your data frame is named 'cleaned_avg_PM25_conc' and is already filtered and renamed.
+# Convert factors to character to avoid issues in ggplot
+data[] <- lapply(data, function(x) if(is.factor(x)) as.character(x) else x)
+# Creating the plot with ggplot
+p <- ggplot(data, aes(x = year)) +
+  geom_line(aes(y = provincial_average, colour = "Provincial Average")) +
+  geom_line(aes(y = x10th_percentile, colour = "10th Percentile")) +
+  geom_line(aes(y = x90th_percentile, colour = "90th Percentile")) +
+  labs(x = "Years", y = "PM2.5 Concentration (μg/m³)") +
+  scale_colour_manual(values = c("Provincial Average" = "blue", "10th Percentile" = "green", "90th Percentile" = "red")) +
+  theme_minimal()
+
+# Display the plot
+p
 ```
+
+The Alberta Air Zone report @report, which is linked to our dataset, provides a detailed explanation of the measurement and processing of the PM2.5 quantity. Alberta Air Zones divides Alberta into six air zones which are aligned with Alberta’s Land-use Framework regional boundaries. Ambient air quality in Alberta is monitored at continuous air monitoring stations located within these air zones. PM2.5 quantities are taken throughout these stations across Alberta, and they measure the quantities in µg (micrograms per cubic meter of air).  
+
+## Data Cleaning 
+
+We used R [@citeR] for data cleaning and processing, utilizing packages like tidyverse [@tidy] for data manipulation and janitor [@jan] for cleaning column names. Other packages used includes `ggplot2` [@ggplot], `dplyr` [@dp], `readr` [@read], `tibble` [@tib], `janitor` [@jan],`reshape2` [@reshape], `knitr` [@knit], `ggbeeswarm` [@gg], `ggrepel` [@repel], `kableExtra`[@kable], `readxl`[@readxl], `MASS`[@mass], `rstanarm`[@rstan], `modelsummary`[@model] and `here` [@here].
+
+The raw air quality data were preprocessed to remove inconsistencies and irrelevant information as shown in @tbl-cleaned-data. Specifically, we filtered the dataset to include observations from the years 2012 to 2021, which are relevant to our analysis. Additionally, we merged this dataset with additional information on peak pollution levels for analysis.
+```{r}
+#| label: tbl-cleaned-data
+#| message: false
+#| echo: false
+#| warning: false
+#| tbl-cap: "Sample of Cleaned State Score Data"
+library(kableExtra)
+
+options(kableExtra.latex.max.width=1)
+head(air_quality_data, 6) |>
+  kable(
+        col.names = c("municipality","year","air_quality_health_index","health_risk","original_value"),
+    booktabs = TRUE,
+    longtable = FALSE
+  ) %>%
+  kable_styling(latex_options = c("striped", "scale_down"), font_size = 6)
+```
+Similar to the previous datasets, the raw mortality data(deaths-leading-causes data) underwent cleaning procedures to focus on specific causes relevant to our analysis. We filtered the dataset to include observations up to 2021 and merged it with additional information on air quality for correlation analysis as showed in @tbl-cleaned-data1. 
+
+
+```{r}
+#| label: tbl-cleaned-data1
+#| message: false
+#| echo: false
+#| warning: false
+#| tbl-cap: "Sample of Cleaned State Score Data"
+library(kableExtra)
+
+options(kableExtra.latex.max.width=1)
+head(deaths_data, 6) |>
+  kable(
+        col.names = c("year","cause","ranking","total_deaths"),
+    booktabs = TRUE,
+    longtable = FALSE
+  ) %>%
+  kable_styling(latex_options = c("striped", "scale_down"), font_size = 6)
+```
+
+The PM2.5 Concentration data was cleaned and merged with other datasets. The Provincial Average of PM2.5 concentration per year is added it to the dataset of mortality to get better results.
+
+
+## Data Modifications
+
+In this study, we constructed unique datasets by thoughtfully selecting and merging data from the Government of Alberta's open data portal, Alberta.ca, spanning the years 2012 to 2022. Our process involved merging variables from various datasets to create specific datasets tailored for model building and analysis.
+One such dataset, 'cleaned_chart_data,' was created by merging variables such as causes of death, total deaths, provincial average PM2.5 levels, and CAAQS. This dataset was designed to facilitate our analysis of any significant correlations between these variables.
+
+Additionally, we derived two other datasets, 'merged_data' and 'merged_heart_data,' by merging variables related to heart disease numbers, lung disease numbers, and provincial average PM2.5 values from year 2001 to 2021. These datasets were instrumental in examining the impact of PM2.5 on each type of illness, as previously discussed.A snapshot of the 'merged_data" for the lung disease is referenced in @tbl-cleaned-data2. 
+
+Overall, our methodology ensured the creation of merged datasets that allowed for a detailed investigation into the relationships between PM2.5 levels and various health outcomes in Alberta. 
+```{r}
+#| label: tbl-cleaned-data2
+#| message: false
+#| echo: false
+#| warning: false
+#| tbl-cap: "Sample of Cleaned State Score Data"
+library(kableExtra)
+
+options(kableExtra.latex.max.width=1)
+head(data_lung, 6) |>
+  kable(
+        col.names = c("year","total_deaths","provincial_average"),
+    booktabs = TRUE,
+    longtable = FALSE
+  ) %>%
+  kable_styling(latex_options = c("striped", "scale_down"), font_size = 6)
+```
+
 
 # Model 
 
@@ -227,20 +197,20 @@ ggplot(average_aqi_by_year, aes(x = year, y = average_aqi)) +
 
 In our analysis, we implemented a series of regression models to study the impact of air pollution on various health outcomes, especially focusing on respiratory and cardiac illnesses in Alberta, Canada. The models used include three variations of negative binomial regression and one Poisson regression model. 
 
-We used *Negative Binomial Regression (NBR)* to study how air pollution affects deaths related to breathing problems. NBR is extremely useful for handling overdispersed count data, where the variance exceeds the mean @neg.
-This method is good for analyzing data where the numbers (like the total number of deaths) vary more than usual. In many real-world scenarios, these numbers can be more unpredictable than what simpler methods like the Poisson distribution can handle. Negative Binomial Regression works better in these kinds of situations since it accounts for this extra unpredictability. It gives us easy-to-understand results that show how average air pollution in a province *(provincial_average)* can affect the number of deaths *(total_deaths)*. 
+We used **Negative Binomial Regression (NBR)** to study how air pollution affects deaths related to breathing problems. NBR is extremely useful for handling overdispersed count data, where the variance exceeds the mean @neg.
+This method is good for analyzing data where the numbers (like the total number of deaths) vary more than usual. In many real-world scenarios, these numbers can be more unpredictable than what simpler methods like the Poisson distribution can handle. Negative Binomial Regression works better in these kinds of situations since it accounts for this extra unpredictability. It gives us easy-to-understand results that show how average air pollution in a province **(provincial_average)** can affect the number of deaths **(total_deaths)**. 
 
 Our first model compares different causes of mortality and their corresponding death count. The second model investigates the relationship between heart-related causes of death and PM2.5 levels. And lastly, the third model analyzes the connection between lung-related causes of death and air quality. To build our model for heart and lung-related causes of death, we identified four key diseases from the dataset and grouped them into two broader categories: heart diseases and lung diseases.
 
 The diseases and their grouping are as follows:
 
-*Heart Diseases*:
+**Heart Diseases**:
 
 Ischemic Heart Disease (All other forms of chronic ischemic heart disease)
 
 Heart Attack (Acute Myocardial Infraction)
 
-*Lung Diseases*:
+**Lung Diseases**:
 
 Trachea/Bronchus/Lung Cancer (Malignant neoplasms of trachea, bronchus, and lung)
 
@@ -249,7 +219,7 @@ COPD (Other chronic obstructive pulmonary disease)
 In our approach, the total deaths from Ischemic Heart Disease and Heart Attack were summed up to create the dataset for heart diseases, and similarly, data from Trachea/Bronchus/Lung Cancer and COPD were combined for lung diseases.
 
 
-*Details of Regression Models*
+**Details of Regression Models**
 
 The general form of our negative binomial model is represented as follows.
 
@@ -262,20 +232,20 @@ y_i | \mu_i, \phi &\sim \text{NegBin}(\mu_i, \phi) \\
 \end{align}
 
 
-1. *Modelling the count data*: 
+1. **Modelling the count data**: 
 
 $y_i|\mu_i, \phi \sim NegBin(\mu_i, \phi)$
 
 Here, $y_i$ represents the count of deaths for each health outcome (like heart or lung disease). The model assumes that the count data follow a Negative Binomial distribution.
 
-2. *Link function and predictors*
+2. **Link function and predictors**
 
 $\mu_i = exp(\alpha + \beta x_i)$
 
 Link Function – This is the link function used for the negative binomial regression. By default, when we specify dist = negbin, the log link function is assumed (and does not need to be specified) @neg.
 In this equation $\mu_i$  is the expected count of deaths, which we model as an exponential function of the predictors. This ensures that our predictions for the count data are always positive. The predictor ($x_i$) in our models include average air pollution levels (provincial_average).
 
-3. *Coefficient*
+3. **Coefficient**
 
 Coefficients are the estimated negative binomial regression coefficients for the model.  We can interpret the negative binomial regression coefficient as follows: for a one unit change in the predictor variable, the log of expected counts of the response variable changes by the respective regression coefficient, given the other predictor variables in the model are held constant @neg.
 
@@ -283,7 +253,7 @@ $\alpha \sim$ Normal(0,2.5): The intercept $\alpha$ has a normal prior, indicati
 
 $\beta \sim$ Normal(0,2.5): The coefficients $\beta$  for our predictors also follow a normal distribution. These coefficients tells us about the relationship strength between air pollution and the health outcomes.
 
-4. *Dispersion parameter*
+4. **Dispersion parameter**
 
 As the dispersion parameter gets larger and larger, the variance converges to the same value as the mean, and the negative binomial converges to a Poisson distribution @clay
 $\phi$ is modeled using an exponential distribution. It accounts for extra variation in the count data that is not explained by the Poisson model alone.
@@ -291,7 +261,7 @@ $\phi$ is modeled using an exponential distribution. It accounts for extra varia
 
 ## Model Summary and Model Results
 
-*Model 1: Comparative Analysis of Mortality Causes*
+**Model 1: Comparative Analysis of Mortality Causes**
 
 Interpretation  of table results from [@tbl-modelcauses]
 
@@ -300,12 +270,12 @@ Interpretation  of table results from [@tbl-modelcauses]
 1. Coefficients - As described above, the coefficients from these models (the $\beta$ values) tell us how changes in the predictors (like provincial average PM2.5 levels) are associated with changes in the response variable (total death counts). A positive coefficient indicates that an increase in the predictor leads to an increase in the response, while a negative coefficient suggests the opposite.
 
 
-*Ischemic Heart Disease*: 
+**Ischemic Heart Disease**: 
 Both Poisson and negative binomial models showed a coefficient of 0.510, suggesting a consistent and significant association between air pollution and mortality due to Ischemic Heart Disease. This positive coefficient highlights a serious public health concern, suggesting that as air pollution worsens, the risk of death due to Ischemic Heart Disease increases.
 
-*Trachea/Bronchus/Lung Cancer*: Similarly, for Trachea/Bronchus/Lung Cancer, both models indicated a coefficient of 0.353, describing the impact of air pollution on these lung diseases. It is learned through this coefficient that increased levels of air pollution are associated with higher mortality rates from these types of lung cancer.
+**Trachea/Bronchus/Lung Cancer**: Similarly, for Trachea/Bronchus/Lung Cancer, both models indicated a coefficient of 0.353, describing the impact of air pollution on these lung diseases. It is learned through this coefficient that increased levels of air pollution are associated with higher mortality rates from these types of lung cancer.
 
-*COPD*: For COPD, the coefficient was minimal (0.004), which suggests that, there is a negligible direct association between air pollution and COPD mortality. It's important to note that this does not necessarily mean air pollution has no effect on COPD but rather, it might indicate that the relationship is more complex and possibly influenced by other variables not captured in the model.
+**COPD**: For COPD, the coefficient was minimal (0.004), which suggests that, there is a negligible direct association between air pollution and COPD mortality. It's important to note that this does not necessarily mean air pollution has no effect on COPD but rather, it might indicate that the relationship is more complex and possibly influenced by other variables not captured in the model.
 
 2. Number of Observations (Num.Obs.): 
 
@@ -388,7 +358,7 @@ modelsummary(
 )
 
 ```
-*Model 2: Heart Disease and Air Quality*
+**Model 2: Heart Disease and Air Quality**
 
 Model 2 discusses and provides results about the specific relationship between heart-related diseases and PM2.5 levels. 
 
@@ -426,7 +396,7 @@ modelsummary::modelsummary(
 ```
 
 
-*Model 3: Lung Disease and Air Quality*
+**Model 3: Lung Disease and Air Quality**
 
 Interpretation of table results from [@tbl-modellung]
 
@@ -460,25 +430,151 @@ modelsummary::modelsummary(
 
 # Results
 
+## Correlation between AQHI and Causes/Death 
+
+Exploring the relationship between AQHI and total mortality measured by the correlation graph @fig-four we notice there is a weak relationship between our chosen group of illnesses and AQHI. 
+
+```{r}
+#| label: fig-four
+#| fig-cap: Mortality Rates vs. Air Quality Health Index
+#| echo: false
+#| warning: false
+#| message: false
+
+
+library(MASS)
+
+air_quality_data <- air_quality_data[air_quality_data$air_quality_health_index != "10+",]
+air_quality_data$air_quality_health_index <- as.numeric(air_quality_data$air_quality_health_index)
+
+# Calculate the average Air Quality Health Index per year
+average_aqi_by_year <- air_quality_data %>%
+  group_by(year) %>%
+  summarize(average_aqi = mean(air_quality_health_index))
+
+combined_data <- merge(deaths_data, average_aqi_by_year, by = "year")
+
+# Plot scatter plot of mortality rates vs. air quality health index
+ggplot(combined_data, aes(x = average_aqi, y = total_deaths)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~cause) +
+  labs(
+       x = "Average Air Quality Health Index",
+       y = "Total Deaths")
+```
+
+The points representing mortality rates due to acute myocardial infarction seem relatively stable across the range of AQHI values. The fitted line is almost flat, suggesting that within the AQHI range provided, there is no strong relationship between AQHI and the mortality rates from this condition. 
+
+Similar to acute myocardial infarction, the mortality rates for ‘All Other Forms of Chronic Ischemic Heart Disease’ appear stable across the AQHI values. The regression line is again flat, indicating no significant trend that suggests an increase or decrease in mortality rates associated with changes in AQHI within the observed range.
+
+For ‘Malignant Neoplasms of Trachea, Bronchus, and Lung’ the scatter plot shows a slight decrease in mortality rates with higher AQHI, as indicated by a gentle negative slope of the regression line. However, given the tight clustering of points, this trend might not be statistically significant. The data does not indicate a strong correlation between AQHI and mortality from these neoplasms within the given range.
+
+The trend for COPD appears similar to that of malignant neoplasms with a slight negative slope. However, the range of mortality rates is relatively narrow, and the points are closely clustered, suggesting a weak relationship, if any, between AQHI and mortality from COPD. 
+
+While we observe a weak correlation between the AQHI and each type of illness, it is important to consider the trends in AQHI over the period from 2012 to 2022, as depicted in @fig-average_air. We notice a noticeable dip in AQHI around the COVID-19 years, but overall, the AQHI remains consistently below 5 on its 1-10 severity scale. This low peak in AQHI may not be severe enough to cause any correlation with the total mortalities of the respiratory and cardiac illnesses we are analyzing. Some of the weak relationships we assessed above can likely be attributed to this factor. 
+
+```{r}
+#| label: fig-average_air
+#| fig-cap: Average Air Quality Health Index by Year
+#| echo: false
+#| warning: false
+#| message: false
+# Ensure the 'year' column is in numeric format for proper line plotting
+average_aqi_by_year$year <- as.numeric(as.character(average_aqi_by_year$year))
+
+# Plotting with ggplot2
+ggplot(average_aqi_by_year, aes(x = year, y = average_aqi)) +
+  geom_line() +  # for lines
+  geom_point() + # for points
+  labs(
+       x = "Year",
+       y = "Average Air Quality Index") +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) # Optional: Adjust x-axis breaks
+```
+
+## Lung and Heart Related Mortality vs. PM2.5 Levels
+
+To assess how PM2.5 affected lung disease and heart disease we interpret the the trends by creating 2 different correlation plots. In the context of lung diseases, PM2.5 is expected to be a significant factor, whereas it should not have a significant impact on heart diseases. In @fig-lung, the lung-related causes graph, we observed a strong linear correlation between the provincial average of PM2.5 and the total deaths from lung diseases. As the provincial average of PM2.5 levels increased, so did the total death count from lung diseases.
+```{r}
+#| label: fig-lung
+#| fig-cap: Lung Related Causes Mortality Rates vs Average PM2.5 Quantity 
+#| echo: false
+#| warning: false
+
+# Plot the regression graph for all lungs causes
+ggplot(data_lung, aes(x = provincial_average, y = total_deaths)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
+  labs(x = "Provincial Average", y = "Total Deaths") +
+  theme_minimal()
+```
 
 
 
-Our results are summarized in @tbl-modelresults.
+In contrast, the heart disease-related deaths showed only a slight correlation when compared to the same levels of PM2.5, as seen in @fig-heart . The values of PM2.5 did not appear to significantly affect heart-related diseases, as the increase in PM2.5 levels resulted in a weak positive linear relationship with the total heart disease-related deaths. 
 
+```{r}
+#| label: fig-heart
+#| fig-cap: Heart Related Causes Mortality Rates vs Average PM2.5 Quantity 
+#| echo: false
+#| warning: false
+# Plot the regression graph for all heart causes
+ggplot(data, aes(x = provincial_average, y = total_deaths)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression line without confidence interval
+  labs(x = "Provincial Average", y = "Total Deaths") +
+  theme_minimal()
+
+
+```
 
 # Discussion
 
-## First discussion point {#sec-first-point}
+## Findings
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+Combining the insights from our models and the graphical data from the graphs for lung and heart-related mortality rates versus average PM2.5 levels, we can conclude the following overall findings from our analysis: 
+ AQHI did not have a significant correlation with respiratory and cardiac illness mortality.
+PM2.5 had a significant association with lung-related illness mortality.
+PM2.5 had a weak correlation to heart-related diseases and, overall did not correlate to its mortality numbers.
 
-## Second discussion point
+More specifically we discuss the model findings, possible reasons for our results, and discrepancies in our correlation analysis and model results below. 
 
-## Third discussion point
+The PM2.5 regression models demonstrate that there is a statistically significant positive association between PM2.5 levels and mortality rates for Ischemic Heart Disease and Trachea/Bronchus/Lung Cancer, as indicated by positive coefficients.
+For COPD and other heart-related causes, the models suggested no direct association with air pollution within the data scope that was analyzed. 
 
-## Weaknesses and next steps
+The correlation graph for lung-related causes and PM2.5 levels shows a slight upward trend, indicating a potential increase in mortality rates with higher PM2.5 levels. This corresponds with the positive coefficients found in the regression models, supporting the hypothesis that poor air quality can affect lung health. 
 
-Weaknesses and next steps should also be included.
+However, the graph for heart-related causes shows a relatively flat trend, which suggests a weak relationship between PM2.5 levels and mortality rates. However, the regression model indicated a significant relationship for Ischemic Heart Disease, overall these results likely suggest that other factors could be influencing the mortality rates that are not captured in this analysis. 
+
+The differences in results between the model analysis and correlation graphs can be attributed to several factors. Firstly, the complexity of environmental health relationships means that simple linear representations may not capture all relationships without the benefit of controlling for other variables. The regression model's focus on specific parameters may also lead to discrepancies, as it may not fully account for all the variables at play. The nature of the data and the limitations of the models themselves can contribute to discrepancies between the two analyses. Additionally, the models account for overdispersion and other confounding variables, providing a more informed understanding of the relationship between air pollution and mortality rates than the data visualizations alone. 
+
+
+Overall, the findings from the models, supported by the trends from the graphs, suggest that PM2.5 has a varying impact on different health outcomes. There is a clear indication that higher levels of PM2.5 are associated with increased mortality from lung cancer and Ischemic Heart Disease. Alternatively, the weak graphical correlation in the heart-related graph does not diminish the relevance of the model's findings but rather underscores the need for a thorough analysis that accounts for a variety of factors affecting heart health. 
+
+
+## Bias 
+
+
+Our analysis is based on the datasets available from provincial open databases, potentially introducing selection bias as these datasets may not represent the entire population of Alberta accurately. Certain demographics or regions may be omitted from the analysis, leading to biased conclusions. 
+Our study does not account for all potential variables that could influence the relationship between air quality and mortality rates, such as socioeconomic factors, healthcare access, lifestyle habits, and weather conditions. Since we are only analyzing a few variables to find correlations towards respiratory-related mortality, these variables could introduce bias into the analysis.
+The datasets used in the analysis may also suffer from sampling bias, particularly if they do not adequately capture the entire population or if certain years or regions are overrepresented compared to others. This could affect the reliability of the findings. As a result, the accuracy and integrity of the data heavily depend on the government of Alberta’s data collection reporting and practice for the three datasets used in our study. 
+
+
+## Limitations
+
+
+In our study, there might be several limitations affecting our conclusions.
+First, between 2010 and 2017, older equipment at Alberta’s monitoring stations was replaced with new monitoring equipment for PM2.5. These new instruments measured an additional portion (semi-volatile) of the PM2.5 mass not captured by older instruments. As a result, the older monitoring equipment used between 2000 and 2017 likely underreported concentrations of PM2.5 under some conditions, after 2010, the increase in PM2.5 concentrations may be a result of changes in monitoring equipment (PM2.5 reference). Overall, the concentrations measured with the new monitors may not be directly comparable with measurements from years in which older instruments were used, possibly hindering trends in our study by some amount. 
+
+
+Furthermore, our study's analysis is limited by the time frame of the available datasets, which may not capture long-term trends or changes in air quality and mortality rates over extended periods. As a result, our findings may not be valid if generalized to other regions with different environmental and demographic characteristics. 
+While the study aims to investigate the relationship between air quality and mortality rates, it may be challenging to establish causation based solely on observational data. The findings may indicate correlations between air quality and mortality rates but cannot definitively prove causality.
+
+
+Lastly, our datasets used are of relatively small size, and this may have significantly impacted the statistical power of the analysis. With fewer data points, the ability to detect meaningful relationships or patterns between variables may have deterred our models from finding any underlying correlations that were not found with the current size. This limitation may have reduced the reliability of the findings we concluded.
+
+
 
 \newpage
 
@@ -486,16 +582,21 @@ Weaknesses and next steps should also be included.
 
 # Appendix {-}
 
-
-# Additional data details
-
 # Model details {#sec-model-details}
 
 ## Posterior predictive check
 
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
+Posterior Predictive Checks for General Model (Death Causes and Total Deaths):
 
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
+In @fig-ppcheckfirst-1 (Posterior prediction check): This plot indicates how well the model's predictions align with the observed data. The overlap between the observed counts (y) and the posterior predictions (y_rep) suggests the model captures the underlying distribution of total death causes effectively.
+
+In @fig-ppcheckfirst-2 (Comparing the posterior with the prior): The plot displays a refinement from broad prior beliefs to more precise posterior beliefs after incorporating the data. The tighter posterior distribution signals that the data have had a substantial impact on the model's estimates.
+
+Posterior Predictive Checks for Heart and Lung Models:
+
+In @fig-ppcheckheartlung-1 (Posterior prediction check for the heart model): The graph shows the posterior predictions closely mirroring the observed mortality data, indicating that the heart model accurately reflects the real-world distribution of heart-related deaths.
+
+In @fig-ppcheckheartlung-2 (Posterior prediction check for the lung model): Similar to the heart model, this plot demonstrates that the lung model's predictions are consistent with the observed data, reaffirming the model's validity in describing lung-related mortality patterns. 
 
 ```{r}
 #| eval: true
@@ -536,10 +637,14 @@ pp_check(lung_model) +
 ```
 
 ## Diagnostics
+@fig-stanareyouokay-1: This trace plot shows the sampled values over iterations for various model parameters. The chains appear stable and well-mixed around a consistent mean, suggesting good convergence of the MCMC algorithm.
+@fig-stanareyouokay-3: The trace plot for the lung model indicates that the chains for each parameter exhibit consistent behavior across iterations, without trending upwards or downwards, which implies convergence.
+@fig-stanareyouokay-5: For the heart model, this trace plot displays a similar pattern of stability and suggests that the chains have converged, as evidenced by their hovering around a constant value.
+Rhat Plots:
 
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
+@fig-stanareyouokay-2: This Rhat plot displays values close to 1.00 for each chain, indicating that convergence has likely been achieved for the first model's parameters.
+@fig-stanareyouokay-4: The Rhat values for the lung model are near the ideal of 1.00, suggesting that there is no evidence of non-convergence and that the model is well-fitted.
+@fig-stanareyouokay-6: In the heart model's Rhat plot, the Rhat values are again close to 1.00, indicating successful convergence across the chains for all estimated parameters.
 
 ```{r}
 #| echo: false
@@ -563,6 +668,8 @@ plot(heart_model,"trace" )
 
 plot(heart_model, "rhat")
 ```
+
+
 
 
 
