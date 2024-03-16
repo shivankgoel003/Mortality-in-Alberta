@@ -1,5 +1,5 @@
 ---
-title: "Respiratory-Related Mortality Rates Show A Positive Correlation With Increasing Air pollution"
+title: "Respiratory-Related Mortality Rates Show A Positive Correlation With Increasing Air Pollution"
 subtitle: "Based on Data Collected From The Province Of Alberta"
 author: 
   - Vanshika Vanshika
