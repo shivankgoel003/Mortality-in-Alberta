@@ -570,5 +570,3 @@ plot(heart_model, "rhat")
 
 
 # References
-
-
