@@ -8,7 +8,7 @@ author:
 thanks: "Code and data are available at: https://github.com/shivankgoel003/Mortality-in-Alberta."
 date: today
 date-format: long
-abstract: "Air pollution's severe health impact on human respiratory and cardiac systems is a growing public health issue. The fine particulate matter (PM2.5) arise a primary concern due to its deep lung penetration and systemic effects. This research uses data from Alberta, Canada, to study the connection between PM2.5 levels as measured by the Air Quality Health Index (AQHI),  and the number of deaths from certain heart and lung diseases. We utilized statistical models, and identified a strong association between increased PM2.5 levels and higher mortality from these diseases. These findings suggest that there is an immediate need for health policies that address air quality improvements to safeguard public health for Alberta and beyond."
+abstract: "Air pollution's severe impact on human respiratory and cardiac health is a growing public health concern across the world. The fine particulate matter (PM2.5) air pollutant is of particular concern because it can deeply penetrate the lungs and cause systemic effects and is largely found in urban environments. This research uses data from Alberta, Canada to assess any correlations between PM2.5 levels and the regional Air Quality Health Index (AQHI), against the number of deaths from groups of respiratory and cardiac illnesses we selected. We utilized statistical models and identified a strong association between increased PM2.5 levels and higher mortality from these diseases. These findings suggest that there is an immediate need for health policies that address air quality improvements to safeguard public health in Alberta and beyond."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -26,7 +26,7 @@ library(here)
 deaths_data <- read.csv(here("data/analysis_data/cleaned_file.csv"))
 air_quality_data <- read.csv(here("data/analysis_data/cleaned_air_data.csv"))
 data <- read.csv(here("data/analysis_data/cleaned_chart_data.csv"))
-data_peak <- read.csv(here("data/analysis_data/cleaned_peak_data.csv"))
+#data_peak <- read.csv(here("data/analysis_data/cleaned_peak_data.csv"))
 data_lung <- read.csv(here("data/analysis_data/merged_data.csv"))
 data_heart <- read.csv(here("data/analysis_data/merged_heart_data.csv"))
 ```
@@ -304,8 +304,8 @@ library(modelsummary)
 
 # Assuming you've already read your models as before
 neg_binom_model <- readRDS(file = here::here("models/neg_binom_model.rds"))
-stan_neg_binom_model <- readRDS(file = here::here("models/stan_neg_binom_model.rds"))
-stan_poisson_model <-readRDS(file = here::here("models/stan_poisson_model.rds"))
+#stan_neg_binom_model <- readRDS(file = here::here("models/stan_neg_binom_model.rds"))
+#stan_poisson_model <-readRDS(file = here::here("models/stan_poisson_model.rds"))
 
 heart_model <- readRDS(file = here::here("models/heart_model.rds"))
 lung_model <-readRDS(file = here::here("models/lung_model.rds"))
@@ -574,6 +574,10 @@ While the study aims to investigate the relationship between air quality and mor
 
 Lastly, our datasets used are of relatively small size, and this may have significantly impacted the statistical power of the analysis. With fewer data points, the ability to detect meaningful relationships or patterns between variables may have deterred our models from finding any underlying correlations that were not found with the current size. This limitation may have reduced the reliability of the findings we concluded.
 
+
+## Future Research
+
+While this study provides valuable insights into the relationship between air quality and mortality rates in Alberta, further research is needed to comprehensively understand the underlying mechanisms and potential confounding factors influencing this relationship. Future studies could explore additional variables, such as socioeconomic status, lifestyle factors, and healthcare access, to elucidate the complex interplay between air quality and mortality rates. Additionally,  studies spanning longer periods  could provide insights into the cumulative effects of chronic exposure to poor air quality on population health. Such research would be useful for informing evidence-based public health interventions and policy decisions aimed at promoting clean air and protecting human health.
 
 
 \newpage
